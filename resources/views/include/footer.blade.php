@@ -3,7 +3,7 @@
   <div class="container">
     <div class="row">
     
-      <div class="col-md-4 col-sm-6 widget">
+      <div class="col-md-4 col-sm-6 widget" style="text-align:center">
         <div class="logo-footer-cont">
           <a href="/">
             <img src="/brands_try/azspreelogo.png" class="logo-img" alt="Azspree">
@@ -26,19 +26,22 @@
           {{-- <a class="a-text" href="mailto:info@haswell.com">gbsc@gmail.com</a> --}}
         </div>
       </div>
-      <div class="col-md-4 col-sm-6 widget">
+      <div class="col-md-4 col-sm-6 widget" style="text-align:center">
         {{-- <img src="/brands_try/azspreelogo.png" class="logo-img" alt="Azspree"> --}}
         <h4>CUSTOMER SERVICES</h4>
           <div class="footer-2-text-cont"> 
-          <div class="row mb-30" style="font-size: 16px">         
+          <div class="row mb-30" style="font-size: 16px;">         
             {{-- <label class="label label-primary"><i class="fa fa-facebook"></i>acebook</label><a href="https://www.facebook.com/AZSpree" title="Facebook" target="_blank" >https://www.facebook.com/AZSpree</a>   --}}
-            <a href="https://www.facebook.com/AZSpree" title="Facebook" target="_blank" class="label label-primary"><i class="fa fa-facebook"></i><label style="font-size: 14px">acebook https://www.facebook.com/AZSpree</label></a>
+            {{-- <a href="https://www.facebook.com/AZSpree" title="Facebook" target="_blank" class="label label-primary"><i class="fa fa-facebook"></i><label style="font-size: 14px">acebook https://www.facebook.com/AZSpree</label></a>
             <a href="https://twitter.com/AZSpree" title="Twitter" target="_blank" class="label label-info"><i class="fa fa-twitter"></i><label style="font-size: 14px"> Twitter https://twitter.com/AZSpree</label></a>
-            <a href="https://www.instagram.com/azspree" title="Instagram" target="_blank" class="label label-default"><i class="fa fa-instagram"></i><label style="font-size: 14px"> Instagram https://www.instagram.com/azspree</label></a>
+            <a href="https://www.instagram.com/azspree" title="Instagram" target="_blank" class="label label-default"><i class="fa fa-instagram"></i><label style="font-size: 14px"> Instagram https://www.instagram.com/azspree</label></a> --}}
+            <a href="https://www.facebook.com/AZSpree"><img src="/brands_try/FacebookIcon.png" class="logo-img" alt="Facebook"></a>
+            <a href="https://twitter.com/AZSpree"><img src="/brands_try/TwitterIcon.png" class="logo-img" alt="Twitter"></a>
+            <a href="https://www.instagram.com/azspree"><img src="/brands_try/InstagramIcon.png" class="logo-img" alt="Instagram"></a>
         </div>
           </div>
       </div>
-      <div class="col-md-4 col-sm-6 widget">
+      <div class="col-md-4 col-sm-6 widget" style="text-align:center">
         <h4>ABOUT US</h4>
           <div class="footer-2-text-cont"> 
           Azspree is an upcoming online shopping website, offering a decent price for aspiring merchant and buyers here in Pampanga.

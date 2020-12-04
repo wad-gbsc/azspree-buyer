@@ -27,7 +27,7 @@
           <div class="col-sm-9">
             <div class="widget">
               <form class="form-search widget-search-form" action="/search" method="get">
-                <input type="text" name="product_details" class="input-search-widget" placeholder="Search">
+                <input type="text" name="keyword" class="input-search-widget" placeholder="Search">
                 <button class="" type="submit" title="Start Search">
                   <span aria-hidden="true" class="icon_search"></span>
                 </button>
@@ -37,7 +37,7 @@
           
           <div class="col-sm3">
             <div class="right">
-                <form method="get" action="/sortbyprice/inct_hash" class="form">
+                <form method="get" action="/sortbyprice" class="form">
                   {{-- {{ csrf_field() }} --}}
                     <select class="select-md form" name="sortbyprice" onchange="this.form.submit()">
                         <option selected disabled="disabled" selected="selected">Sort by Price</option>
@@ -58,7 +58,9 @@
             </div>
             
             <div class="post-prev-title mb-5">
-              <h3><a class="font-norm a-inv" href="/productdetails/{{$products->inmr_hash}}">{{$products->product_details}}</a></h3>
+              <h3 style="text-overflow: ellipsis;
+              white-space: nowrap;
+              overflow: hidden;" ><a class="font-norm a-inv" href="/productdetails/{{$products->inmr_hash}}">{{$products->product_name}}</a></h3>
             </div>
               
             <div class="shop-price-cont" data-price={{ $products->cost_amt }}>

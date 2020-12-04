@@ -25,7 +25,7 @@
                       <!-- DIVIDER -->
                       <hr class="mt-0 mb-10">
                       <br>&nbsp;
-                    <button class="btn btn-danger" style="width: 80%" ><i class="fa fa-google" aria-hidden="true"></i> Login with Gmail</button>
+                      <a href="{{ url('auth/google') }}" class="btn btn-danger" style="width: 80%" ><i class="fa fa-google" aria-hidden="true"></i> Login with Gmail
                       {{-- <img src="/brands_try/azspree_logo.png" class="" alt="Azspree"> --}}
                     </a>
                   </div>
@@ -47,21 +47,6 @@
                     <!-- LOGIN FORM -->
                     <div>
                       <form id="login_form" autocomplete="off">
-                        <div class="row row-error">
-                          <div class="col-md-12">
-                            <div class="alert alert-danger nobottommargin">
-                              <span aria-hidden="true" class="alert-icon icon_blocked"></span><span class="msg">Invalid email or password.</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row row-success">
-                          <div class="col-md-12">
-                            <div class="alert alert-success">
-                              <span aria-hidden="true" class="alert-icon icon_like"></span>Successfully Logged In.
-                            </div>
-                          </div>
-                        </div>                  
-
                         <div class="row">
                           <div class="col-md-12 mb-30">
                             <!-- <label>Your name *</label> -->
@@ -72,9 +57,27 @@
                         <div class="row">    
                           <div class="col-md-12 mb-30">
                             <input type="password"  name="password" value="" data-msg-required="Please enter your password" data-msg-password="Please enter a password" maxlength="100" class="controled" name="password" id="password" placeholder="PASSWORD" required>
+                            <br>
+                            <input type="checkbox" onclick="myFunction()"><span style="color:rgb(57, 57, 199)"> Show Password </span>
                             </div>
                         </div>
                         
+
+                        <div class="row row-error">
+                          <div class="col-md-12">
+                            <div class="alert alert-danger animated shake">
+                              <span aria-hidden="true" class="alert-icon icon_blocked"></span><span class="msg">Invalid email or password.</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row row-success">
+                          <div class="col-md-12">
+                            <div class="alert alert-success animated fadeIn">
+                              <span aria-hidden="true" class="alert-icon icon_like"></span>Successfully Logged In.
+                            </div>
+                          </div>
+                        </div> 
+
                         <div class="row">
                           <div class="col-md-12 text-center-xxs">
                               <button type="button" class="button medium blue" id="btnlogin" style="width: 100%">
@@ -132,6 +135,15 @@
   
 @section('embeddedjs')
 <script type="text/javascript">
+
+function myFunction() {
+  var x = document.getElementById("password");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
 
   var initializeControls = function(){
     $('.row-error').hide();

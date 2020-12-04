@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Session;
 use Hash;
 use DB;
+use Socialite;
 
 class LoginController extends Controller
 {
@@ -112,12 +113,64 @@ class LoginController extends Controller
         }
     }
 
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        try {
+
+            $user = Socialite::driver('google')->user();
+
+            $finduser = User::where('email', $user->email)->first();
+            // $result = User::select('*')
+            // ->where('email', $email)
+            // ->where('type', 'US')
+            // ->where('status', 'A')
+            // ->get();
+
+            if($finduser){
+
+                Auth::login($finduser);
+
+                return redirect('/');
+
+            }else{
+                // $newUser = new User();
+                // $newUser->fullname = $user->name;
+                // $newUser->email = $user->email;
+                // $newUser->password = Hash::make($user->password);
+                // $newUser->type = 'US';
+                // $newUser->status = 'A';
+                // $newUser->create_datetime = Carbon::now();
+                // $newUser->save();
+                $newUser = User::create([
+                    'fullname' => $user->name,
+                    'email' => $user->email,
+                    'password' => Hash::make($user->password),
+                    'google_id'=> $user->id
+                ]);
+
+                // Auth::login($newUser);
+
+                // return redirect('/');
+                return redirect()->back();
+            }
+
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            return redirect('auth/google');
+        }
+    }
     
     public function logout()
     {
         Session::forget('user_hash');
         return view('pages.login');
     }
+
 
     
     // protected function respondWithToken($token)

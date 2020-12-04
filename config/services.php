@@ -29,5 +29,10 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'google' => [
+        'client_id' => '782154035632-k0suabhthirkcgf0j4eaups9ome166kl.apps.googleusercontent.com',
+        'client_secret' => 'j-yFKzFU31UOlX2oxr6V4R9S',
+        'redirect' => 'https://localhost.azspree.com/auth/google/callback',
+    ],
 
 ];

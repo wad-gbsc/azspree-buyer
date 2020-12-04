@@ -25,26 +25,6 @@
             <div class="container">
                 <div class="row">
                     <div class="">
-                    <div class="row row-error">
-                        <div class="col-md-12">
-                            <div class="alert alert-danger nobottommargin">
-                                <span aria-hidden="true" class="alert-icon icon_blocked"></span>
-                                <span class="error_msg"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row div_success">
-                        <div class="col-md-12" style="align-content: center;">
-                            <div class="row row-success">
-                                <div class="col-md-12">
-                                    <div class="alert alert-success">
-                                        <span aria-hidden="true" class="alert-icon icon_like"></span>
-                                        <span class="success_msg"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <!-- ITEM PHOTO -->
                     <div class="col-md-4 col-sm-12 mb-50">
 
@@ -85,20 +65,21 @@
                             <hr class="mt-0 mb-30">
                             <div class="row">
 
-                                <div class="col-xs-6  mt-0 mb-30">
+                                <div class="col-xs-4  mt-0 mb-30">
                                     {{-- <del>$130.00</del>
                                     --}}
                                     <strong><label class="item-price">&#8369; {{ number_format($data['products']->cost_amt, 2) }}</label></strong>
                                     <input type="hidden" name="cost_amt" value="{{ $data['products']->cost_amt }}" />
                                 </div>
 
-                                <div class="col-xs-6 text-right">
-                                    <label>
-                                        21 <span
+                                <div class="col-xs-8 text-right">
+                                    <label style="color:rgb(72, 99, 160); font-size: 18px" >
+                                        {{$data['products']->sales}} <span
                                         class="display-none-767">Sold</span>
                                         <span class="slash-divider">/</span> 
                                     </label>
-                                    <label style="color:rgb(72, 99, 160);"> 4.8&nbsp;
+                                    <label style="color:rgb(72, 99, 160); font-size: 18px">
+                                         {{-- 4.8&nbsp; --}}
                                         <span >
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
@@ -106,7 +87,7 @@
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star-o"></i>
                                           </span></label>
-                                    <label><span class="slash-divider">/</span><a href="/"> 21 </a><span
+                                    <label style="color:rgb(72, 99, 160); font-size: 18px" ><span class="slash-divider">/</span>{{$data['products']->number_ratings}} <span
                                             class="display-none-767">Reviews</span>
                                     </label>
                                 </div>
@@ -114,7 +95,8 @@
                             </div>
 
                             <div class="font-14 lh-20 mb-30">
-                                <div>Brand: <label style="color:black; bold">{{ $data['products']->product_details }}</label></div>
+                                {{-- <div>Brand: <label style="color:black; bold"></label></div> --}}
+                                <div style="color:rgb(72, 99, 160); font-size: 18px" ><b>Shop: </b><label>{{ $data['products']->seller_name }}</label></div>
                                 <div>Category: <label style="color:black">{{ $data['products']->cat_name }}</label>
                                     <span class="slash-divider">></span> <label style="color:black">{{ $data['products']->subcat_name }}</label>
                                 </div>
@@ -133,7 +115,7 @@
                             <hr class="mt-0 mb-30">
 
                             <div class="mb-30">
-                                <label>{{ $data['products']->product_desc }}</label><br>
+                                <label>{{ $data['products']->product_details }}</label><br>
                                 <label>Length: {{ $data['products']->length }}</label><br>
                                 <label>Width: {{ $data['products']->width }}</label><br>
                                 <label>Height: {{ $data['products']->height }}</label><br>
@@ -144,7 +126,7 @@
                             <hr class="mt-0 mb-30">
 
                             <div class="row">
-                                {{-- <div class="col-sm-6 mb-30">
+                                <div class="col-sm-6 mb-30">
                                         <select class="select-md input-border w-100" name="variant_1" data-msg-required="Please enter Size" required>
                                             <option>Select size</option>
                                             <option>XXL</option>
@@ -162,13 +144,33 @@
                                             <option>Blue</option>
                                             <option>White</option>
                                         </select>
-                                </div> --}}
+                                </div>
                             </div>
 
                             <hr class="mt-0 mb-30">
 
                             <!-- ADD TO CART -->
                             <div class="row mb-30">
+                                <div class="row row-error">
+                                    <div class="col-md-12">
+                                        <div class="alert alert-danger animated shake">
+                                            <span aria-hidden="true" class="alert-icon icon_blocked"></span>
+                                            <span class="error_msg"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row div_success">
+                                    <div class="col-md-12" style="align-content: center;">
+                                        <div class="row row-success">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success animated fadeIn">
+                                                    <span aria-hidden="true" class="alert-icon icon_like"></span>
+                                                    <span class="success_msg"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 {{-- <form method="post" action="#" class="form">
                                     --}}
                             
@@ -205,7 +207,10 @@
 
             <hr class="mt-0 mb-80">
 
-            <div class="container mb-100">
+    <div class="container mb-100">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row" >&nbsp;
                 <h5 class="widget-title label label-primary" style="color: white">Product Reviews</h5>&nbsp;<br><br>
             <table class="table">
                 <?php 
@@ -295,10 +300,34 @@
               <?php }?>
             </table>
             </div>
+            </div>
+        </div>
+    </div>
 
             <div class="container mb-100">
+                <div class="row row-success2">
+                    <div class="col-md-12">
+                            <div class="alert alert-success animated fadeIn">
+                                <strong>Success!</strong>
+                                <span class="success_msg"></span>
+                            </div>
+                    </div>
+                </div>
+
+                  <div class="row row-error2">
+                    <div class="col-md-12" >
+                        <div class="alert alert-danger animated shake contactError">
+                            <strong>Error!</strong>
+                            <span class="error_msg"></span>
+                        </div>
+                    </div>
+                  </div>
                 <div>
-                        <div class="mb-30">
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row" >
+                        <div class="mb-30">&nbsp;
                             <h5 class="widget-title label label-primary" style="color: white">question(s)</h5>	
                           <ul class="media-list text comment-list">
                             <li>
@@ -314,24 +343,18 @@
                                         <div>
                                           <div class="col-md-12 mb-40">
                                             <!-- <label>Message *</label> -->
-                                            <textarea maxlength="5000" data-msg-required="Please enter your message" rows="3" class="controled" name="comment" id="comment" placeholder="ENTER YOUR QUESTION(S) HERE" required=""></textarea>
+                                            <br>
+                                            <textarea style="resize: vertical;" maxlength="5000" data-msg-required="Please enter your message" rows="3" class="form-control" name="comment" id="comment" placeholder="ENTER YOUR QUESTION(S) HERE" required=""></textarea>
                                           </div>
                                         </div>
                                       </div>
                                       <div class="row">
                                         <div class="col-md-12">
-                                          <input type="submit" id="btnmsg" value="SEND MESSAGE" data-user-id="<?php echo session('user_hash'); ?>"  class="button medium blue" >
+                                          &nbsp;<input type="button" id="btnmsg" value="SEND MESSAGE" data-user="<?php echo session('user_hash'); ?>"  class="button medium blue" >
                                         </div>
                                       </div>
                                     </form>	
-
-                                    <div class="alert alert-success hidden animated fadeIn" id="contactSuccess" >
-                                      <strong>Success!</strong> Your message has been sent to us.
-                                    </div>
-          
-                                    <div class="alert alert-danger hidden animated shake" id="contactError">
-                                      <strong>Error!</strong> There was an error sending your message.
-                                    </div>
+                                   
                                   </div>
                             </li>
 
@@ -373,6 +396,9 @@
                             <?php }?>
                           </ul>
                         </div>
+                            </div>
+                        </div>
+                    </div>
                         <!-- End Add Review -->
                               
                       </div>
@@ -403,6 +429,11 @@
         $('.div_success').hide();
     }();
 
+    var initializeControls = function() {
+        $('.row-error2').hide();
+        $('.row-success2').hide();
+    }();
+
     var validateRequiredFields = function(f) {
         var stat = true;
 
@@ -430,6 +461,29 @@
                     return false;
                 }
             }
+
+        });
+
+        return stat;
+    };
+
+    var validateRequiredFields2 = function(f) {
+        var stat = true;
+
+        $('.row-error2').hide();
+        $('div.form-group').removeClass('has-error');
+        $('div.fg-line').removeClass('has-error');
+        $('input[required],textarea[required],select[required]', f).each(function() {
+
+                if ($(this).val() == 0 || $(this).val() == "") {
+                // if ($(this).val() == "") {
+                    $('.error_msg').html($(this).data('msg-required'));
+                    $('.row-error2').fadeIn(400);
+                    $(this).closest('.fg-line').addClass('has-error');
+                    $(this).focus();
+                    stat = false;
+                    return false;
+                }
 
         });
 
@@ -471,7 +525,7 @@
                     $('.success_msg').html(response.msg);
                     $('.row-success').fadeIn(400);
                     setTimeout(function() {
-                        window.location.href = "/";
+                        window.location.href = "/mycart";
                     },1000);
                 } else {
                     $('.row-error').show();
@@ -507,26 +561,26 @@
 
     $('#btnmsg').click(function() {
         
-        var user_hash = $(this).attr("data-user-id");
+        var user_hash = $(this).attr("data-user");
 
         if(user_hash == "" || null){
             window.location.href = "/login";
         }else{
-            if (validateRequiredFields($('#msg-form'))) {
+            if (validateRequiredFields2($('#msg-form'))) {
 
             AddMsg().done(function(response) {
 
                 if (response.stat == "success") {
-                    $('.div_success').show();
+                    $('.row-success2').show();
                     $('.success_msg').html(response.msg);
-                    $('.row-success').fadeIn(400);
+                    $('.row-success2').fadeIn(400);
                     setTimeout(function() {
                         window.location.href = "/";
                     },1000);
                 } else {
-                    $('.row-error').show();
+                    $('.row-error2').show();
                     $('.error_msg').html(response.msg);
-                    $('.row-error').fadeIn(400);
+                    $('.row-error2').fadeIn(400);
                 }
             })
             }

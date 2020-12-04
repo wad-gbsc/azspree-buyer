@@ -127,21 +127,6 @@ class CartController extends Controller
     // ->select('brgy_hash','barangay')
     // ->where('brgy.city_hash', $city_hash )
     // ->get();
-                $unit_total = 0; 
-                $order_subtotal = 0; 
-                $total_qty = 0; 
-                $shipping = 0; 
-                $shipping_extra = 0;
-                $shipping_city = 0; 
-                $order_total = 0; 
-                $cart_subtotal = 0; 
-                $total_shipping = 0; 
-                $total_payment = 0;
-                $dimension = 0;
-                $weight = 0;
-                $total_kg = 0;
-                $max_kg = 5;
-
     $ursf = DB::table('ursf')
             ->select('shipping_fee')
             ->where('city_hash', $city_hash)
@@ -180,7 +165,7 @@ class CartController extends Controller
 
         if($validator->fails()){
             $response['stat']='error';
-            $response['msg']='<b>The quantity may not be greater than Available stock.</b>';
+            $response['msg']='<b>Low Available stock.</b>';
             echo json_encode($response);
         } else {
             $addcart = new CartDetail();
@@ -207,9 +192,13 @@ class CartController extends Controller
         public function createmsg(Request $request)
             {
                 if(Session::has('user_hash')){
-                $user_hash = session('user_hash');
-                $title = 'MyCart';
-                $data['mycart'] =  User::where('is_deleted', 0)->findOrFail($user_hash);
+                    $user_hash = session('user_hash');
+
+                    $validator = Validator::make($request->all(),
+                    [
+                        'comment' => 'required'
+                    ]
+                    );
                 
                     $addcart = new Comment();
                     $addcart->user_hash = $user_hash;
@@ -219,7 +208,7 @@ class CartController extends Controller
                     $addcart->save();
 
                     $response['stat']='success';
-                    $response['msg']='<b>Comment post.</b>';
+                    $response['msg']='<b>Your message has been sent to us.</b>';
                     echo json_encode($response);
                 }        
             }
@@ -272,6 +261,9 @@ class CartController extends Controller
                 $weight = 0;
                 $total_kg = 0;
                 $max_kg = 5;
+                $sub_1 = 0;
+                $sub_2 = 0;
+
 
                 $order = new OrderHeader();
                 $order->order_no = date('Ymd').'-';
@@ -285,6 +277,7 @@ class CartController extends Controller
                 $order->sumr_hash = $supplier[$i]->sumr_hash;
                 $order->payment_method = $request->input('payment_method');
                 $order->create_datetime = Carbon::now();
+                // $order->expire_cancel_datetime = Carbon::now()->addHours(5);
                 $order->save();
 
                 $sohr_hash = $order->sohr_hash;
@@ -352,6 +345,7 @@ class CartController extends Controller
                     }   
 
                 }
+                // sleep(60);
 
                 $order = OrderHeader::findOrFail($sohr_hash);
                 $order->order_no = date('Ymd').'-'.$sohr_hash;
@@ -387,7 +381,7 @@ class CartController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
+    { 
         $data['products'] = Product::leftJoin('inct', 'inct.inct_hash', '=', 'inmr.inct_hash')
         ->leftJoin('insc', 'insc.insc_hash', '=', 'inmr.insc_hash')
         ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'inmr.sumr_hash')

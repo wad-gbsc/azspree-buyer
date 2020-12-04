@@ -16,7 +16,7 @@ class PagesController extends Controller
     {
         $title = 'Azspree';
         $categories =  DB::table('inct')->where('is_deleted', 0)->orderBy('cat_name','asc')->get();
-        $content =  DB::table('inmr')->where('is_deleted', 0)->orderBy('inmr_hash')->paginate(18);
+        $content =  DB::table('inmr')->where('is_deleted', 0)->where('is_verified', 1)->orderBy('inmr_hash','desc')->paginate(18);
         
         return view('welcome', compact('categories','content'));
     }
@@ -82,13 +82,19 @@ class PagesController extends Controller
     public function search(Request $request)
     {
 
-        $search = $request->product_details;
+        $search = $request->keyword;
 
         $categories =  DB::table('inct')->where('is_deleted', 0)->get();
 
         $content=  DB::table('inmr')
+        ->leftJoin('inct', 'inct.inct_hash', '=', 'inmr.inct_hash')
+        ->leftJoin('insc', 'insc.insc_hash', '=', 'inmr.insc_hash')
         ->where('inmr.is_deleted', 0)
-        ->where('product_details','like',"%".$search."%")
+        ->where('inmr.is_verified', 1)
+        ->where('inmr.product_name','like',"%".$search."%")
+        ->orwhere('inmr.product_details','like',"%".$search."%")
+        ->orwhere('inct.cat_name','like',"%".$search."%")
+        ->orwhere('insc.subcat_name','like',"%".$search."%")
         ->paginate(18);
 
         return view ('welcome',compact('categories','content'));
@@ -101,9 +107,9 @@ class PagesController extends Controller
         $categories =  DB::table('inct')->where('is_deleted', 0)->orderBy('cat_name','asc')->get();
 
          if ($sortbyprice == 'asc'){
-            $content = DB::table('inmr')->where('inmr.is_deleted', 0)->orderBy('cost_amt','asc')->paginate(18);
+            $content = DB::table('inmr')->where('inmr.is_deleted', 0)->where('is_verified', 1)->orderBy('cost_amt','asc')->paginate(18);
             } else {
-            $content = DB::table('inmr')->where('inmr.is_deleted', 0)->orderBy('cost_amt','desc')->paginate(18);
+            $content = DB::table('inmr')->where('inmr.is_deleted', 0)->where('is_verified', 1)->orderBy('cost_amt','desc')->paginate(18);
             }
 
         return view ('welcome',compact('categories','content'));
@@ -123,9 +129,9 @@ class PagesController extends Controller
         $category =  DB::table('inct')->where('is_deleted', 0)->orderBy('cat_name','asc')->get();
 
          if ($sortbypricebycat == 'asc'){
-            $content = DB::table('inmr')->where('inmr.is_deleted', 0)->orderBy('cost_amt','asc')->paginate(18);
+            $content = DB::table('inmr')->where('inmr.is_deleted', 0)->where('is_verified', 1)->orderBy('cost_amt','asc')->paginate(18);
             } else {
-            $content = DB::table('inmr')->where('inmr.is_deleted', 0)->orderBy('cost_amt','desc')->paginate(18);
+            $content = DB::table('inmr')->where('inmr.is_deleted', 0)->where('is_verified', 1)->orderBy('cost_amt','desc')->paginate(18);
             }
 
        return view ('pages.categories',compact('category','content','cat'));
@@ -135,11 +141,13 @@ class PagesController extends Controller
         $content =  DB::table('inmr')
         ->leftJoin('inct', 'inct.inct_hash', '=', 'inmr.inct_hash')
         ->where('inmr.is_deleted', 0)
+        ->where('is_verified', 1)
         ->where('inmr.inct_hash', $id)
         ->paginate(18);
 
         $cat =  DB::table('inct')
         ->where('is_deleted', 0)
+        ->where('is_verified', 1)
         ->where('inct_hash', $id)
         ->groupBy('cat_name')
         ->get();

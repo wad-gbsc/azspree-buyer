@@ -12,27 +12,6 @@
               <div >
                 <h3 class="mt-0 mb-50">SHIPPING INFORMATION</h3>
               </div>
-              <div class="row row-error">
-                <div class="col-md-12">
-                    <div class="alert alert-danger nobottommargin">
-                        <span aria-hidden="true" class="alert-icon icon_blocked"></span>
-                        <span class="error_msg"></span>
-                    </div>
-                </div>
-              </div>
-              <div class="row div_success">
-                <div class="col-md-12" style="align-content: center;">
-                    <div class="row row-success">
-                        <div class="col-md-12">
-                            <div class="alert alert-success">
-                                <span aria-hidden="true" class="alert-icon icon_like"></span>
-                                <span class="success_msg"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
-
             <div class="row">
               <form id="add-form" autocomplete="off">
               <div class="col-sm-6">
@@ -91,7 +70,7 @@
 
                         <!-- DIVIDER -->
                       <hr class="mt-0 mb-10">
-
+                      
                       <h4 class="blog-page-title mt-40 mb-25">PAYMENT METHOD</h4>
 
                       <div class="mb-20">
@@ -205,6 +184,8 @@
                                       <input type="hidden" value="{{ $addcart->weight }}" name="weight[]" id="items" />
                                       <input type="hidden" value="{{ $addcart->qty }}" name="qty[]" id="items" />
                                       <input type="hidden" value="{{ $addcart->unit_price }}" name="unit_price[]" id="items"/>
+                                      
+
                                       </div>
                                       <div class="col-md-2">  
                                         {{ number_format($unit_total, 2) }}
@@ -226,7 +207,9 @@
                                     <input type="hidden" value="{{ $order_total }}" name="order_total" > --}}
                                     
                                     <input type="hidden" name="payment_method" data-msg-required="PLEASE CHECK PAYMENT METHOD" required>
-                                    <span class="font-norm1" >SHIPPING:</span> <strong>&#8369; <span name="shipping"> {{ number_format($shipping, 2) }}</span> </strong><br>
+                                    <input type="hidden" value="{{ $shipping_extra }}" id="shipping_extra"/>
+                                    <span class="font-norm1" >EXTRA FEE:</span> <strong>&#8369; {{ number_format($shipping_extra, 2) }} </strong><br>
+                                    <span class="font-norm1" >SHIPPING:</span> <strong>&#8369; <span name="shipping"> 0.00</span> </strong><br>
                                     <span class="font-norm1">ORDER TOTAL:</span> <strong>&#8369; {{ number_format($order_total, 2) }} </strong>
                                   </div>
                                 </div>
@@ -244,7 +227,8 @@
                   </h5> 
                   
                   <h5 class="mt-10 mb-10">
-                    <span class="font-norm1">SHIPPING:</span> <strong style="font-size:20px">&#8369; {{ number_format($total_shipping, 2) }}</strong>
+                    {{-- <span class="font-norm1">TOTAL SHIPPING:</span> <strong style="font-size:20px">&#8369; <span id="total_shipping">{{ number_format($total_shipping, 2) }}</span></strong> --}}
+                    <span class="font-norm1">TOTAL SHIPPING:</span> <strong style="font-size:20px">&#8369; <span id="total_shipping"> 0.00 </span></strong>
                   </h5>
                   
                   <!-- DIVIDER -->
@@ -253,16 +237,34 @@
                   <h3 class="mt-10 mb-30">
                     <span class="font-norm1">TOTAL PAYMENT:</span> <strong style="font-size:22px">&#8369; {{ number_format($total_payment, 2) }} </strong>
                   </h3>
-                  </div>
-
                   <?php }?>
-
+                  <div class="row row-error">
+                    <div class="col-md-12">
+                        <div class="alert alert-danger animated shake">
+                            <span aria-hidden="true" class="alert-icon icon_blocked"></span>
+                            <span class="error_msg"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row div_success">
+                    <div class="col-md-12" style="align-content: center;">
+                        <div class="row row-success">
+                            <div class="col-md-12">
+                                <div class="alert alert-success animated fadeIn">
+                                    <span aria-hidden="true" class="alert-icon icon_like"></span>
+                                    <span class="success_msg"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                   <div class="mb-0" style="text-align: right">
                     {{-- <a href="/payment" class="button medium blue w-100-767">CONFIRM ORDER</a>  --}}
                     <button type="button" id="btnpayment" class="button medium blue">
                       <span class=""></span> <label class="btnpayment_label">CONFIRM ORDER</label>
                     </button>
                   </div>
+                </div>
               </form>
             </div>
       </div>
@@ -292,13 +294,31 @@ $(document).ready(function() {
       success:function(data) {
         // console.log(data);
           $.each(data, function(key, value) {
-          $('span[name="shipping"]').append( value.shipping_fee);
-          $('span[name="shipping"]').trigger("change");
+          // $('span[name="shipping"]').trigger("change");
+          var shipping_extra = parseFloat($('#shipping_extra').val());
+          var shipping_fee = parseFloat(value.shipping_fee);
+          var shipping = shipping_fee+shipping_extra;
+          $('span[name="shipping"]').html(shipping);
+
+
+          var total_shipping = 0;
+          var total_shipping_extra = 0;
+
+            $('span[name="shipping"]').each(function(){
+              total_shipping += parseFloat($(this).html());
+            });
+
+            $('#shipping_extra').each(function(){
+              total_shipping_extra += parseFloat($(this).val());
+            });
+          
+          var grand_total_shipping = total_shipping + total_shipping_extra;
+          $('#total_shipping').html(grand_total_shipping);
           });
         }
         });
-      }else{
-      $('span[name="shipping"]').empty();
+      // }else{
+      // $('span[name="shipping"]').empty();
       }
   });
   

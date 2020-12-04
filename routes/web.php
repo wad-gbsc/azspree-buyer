@@ -21,6 +21,8 @@
 
 // Route::get('/home', 'HomeController@index')->name('home');
 // Route::get('/welcome', 'PagesController@index');
+Route::get('auth/google', 'LoginController@redirectToGoogle');
+Route::get('auth/google/callback', 'LoginController@handleGoogleCallback');
 Route::get('/', 'PagesController@index');
 Route::get('/search', 'PagesController@search');
 Route::post('/search', 'PagesController@search');
@@ -47,6 +49,7 @@ Route::get('/mycart', 'CartController@index');
 Route::get('/checkout', 'CartController@indexcheckout');
 Route::get('/delete/{id}', 'CartController@delete');
 Route::get('/updatestatus/{id}', 'ProfileController@updatestatus');
+Route::get('/updatecancel/{id}', 'ProfileController@updatecancel');
 Route::get('/review/{id}', 'ProfileController@review');
 Route::post('/cart/create', 'CartController@create');
 Route::post('/cart/createmsg', 'CartController@createmsg');

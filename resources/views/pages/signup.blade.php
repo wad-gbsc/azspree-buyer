@@ -8,26 +8,6 @@
 
         <div class="row mb-20">
             <div class="">
-                <div class="row row-error">
-                    <div class="col-md-12">
-                        <div class="alert alert-danger nobottommargin">
-                            <span aria-hidden="true" class="alert-icon icon_blocked"></span>
-                            <span class="error_msg"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row div_success">
-                    <div class="col-md-12" style="align-content: center;">
-                        <div class="row row-success">
-                            <div class="col-md-12">
-                                <div class="alert alert-success">
-                                    <span aria-hidden="true" class="alert-icon icon_like"></span>
-                                    <span class="success_msg"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-md-6">
                     <div class="relative">
 
@@ -115,6 +95,27 @@
                                                     <input type="password"
                                                         data-msg-required="The confirm your password." maxlength="100"
                                                         class="form-control" name="con_password" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row row-error">
+                                                <div class="col-md-12">
+                                                    <div class="alert alert-danger animated shake">
+                                                        <span aria-hidden="true" class="alert-icon icon_blocked"></span>
+                                                        <span class="error_msg"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row div_success">
+                                                <div class="col-md-12" style="align-content: center;">
+                                                    <div class="row row-success">
+                                                        <div class="col-md-12">
+                                                            <div class="alert alert-success animated fadeIn">
+                                                                <span aria-hidden="true" class="alert-icon icon_like"></span>
+                                                                <span class="success_msg"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -212,16 +213,16 @@
   return ((key >= 65 && key <= 90));
 };
 
-    var contact_no = document.getElementById('contact_no');
+    // var contact_no = document.getElementById('contact_no');
 
-    // Listen for input event on numInput.
-    contact_no.onkeydown = function(e) {
-        if(!((e.keyCode > 95 && e.keyCode < 106)
-        || (e.keyCode > 47 && e.keyCode < 58) 
-        || e.keyCode == 8)) {
-            return false;
-        }
-    }
+    // // Listen for input event on numInput.
+    // contact_no.onkeydown = function(e) {
+    //     if(!((e.keyCode > 95 && e.keyCode < 106)
+    //     || (e.keyCode > 47 && e.keyCode < 58) 
+    //     || e.keyCode == 8)) {
+    //         return false;
+    //     }
+    // }
 
     var CreateUser = (function() {
         var _data = $('#signup-form').serializeArray();
@@ -255,10 +256,10 @@
                     },1000);
                 } else {
                     $('.row-error').show();
-                    $('.error_msg').html(response.msg.fullname);
-                    $('.error_msg').html(response.msg.email);
-                    $('.error_msg').html(response.msg.contact_no);
                     $('.error_msg').html(response.msg.password);
+                    $('.error_msg').html(response.msg.contact_no);
+                    $('.error_msg').html(response.msg.email);
+                    $('.error_msg').html(response.msg.fullname);
                     // $('.error_msg').html(response.msg, response.$msg['required'], response.$msg['contact_no.required']);
                     $('.row-error').fadeIn(400);
                 }
