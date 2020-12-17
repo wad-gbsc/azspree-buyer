@@ -138,15 +138,14 @@
                                 if($order->order_name == 'COMPLETED'){
                                 ?> 
                                 <div class="col-md-12" >
-                                <div style="float: right" >
-                                  <?php 
-                                if($order->rating == '0'){
-                                ?> 
-                                <a href="" data-toggle="modal" data-target="#ModalReview{{$order->inmr_hash}}" class="button medium blue w-100-100">RATE NOW</a>
-                                <span class="slash-divider"></span>
-                                <?php }?>
-                                <a href="/productdetails/{{$order->inmr_hash}}" class="button medium blue w-100-100">BUY AGAIN</a>
-                                </div>
+                                  <div style="float: right" >
+                                    <?php if($order->status_ratings === '0') { ?> 
+                                      <a href="" data-toggle="modal" data-target="#ModalReview{{$order->inmr_hash}}" class="button medium blue w-100-100">RATE NOW</a>
+                                      <span class="slash-divider"></span>
+                                    <?php }?>
+                                      <a href="/productdetails/{{$order->inmr_hash}}" class="button medium blue w-100-100">BUY AGAIN</a>
+                                      <span class="slash-divider"></span>
+                                  </div>
                                 </div>
                                 <?php }?>
                                 </div>
@@ -373,23 +372,22 @@
                                   
                                 </div>
                                 <div class="row">
-                                {{-- SHOW ONCED RECEIVED ORDER --}}
-                                <?php 
-                                if($order->order_name == 'COMPLETED'){
-                                ?> 
-                                <div class="col-md-12" >
-                                <div style="float: right" >
+                                  {{-- SHOW ONCED RECEIVED ORDER --}}
                                   <?php 
-                                if($order->rating == '0'){
-                                ?> 
-                                <a href="" data-toggle="modal" data-target="#ModalReview{{$order->inmr_hash}}" class="button medium blue w-100-100">RATE NOW</a>
-                                <span class="slash-divider"></span>
-                                <?php }?>
-                                <a href="/productdetails/{{$order->inmr_hash}}" class="button medium blue w-100-100">BUY AGAIN</a>
-                                </div>
-                                </div>
-                                <?php }?>
-                                </div>
+                                  if($order->order_name == 'COMPLETED'){
+                                  ?> 
+                                  <div class="col-md-12" >
+                                    <div style="float: right" >
+                                      <?php if($order->status_ratings === '0') { ?> 
+                                        <a href="" data-toggle="modal" data-target="#ModalReview{{$order->inmr_hash}}" class="button medium blue w-100-100">RATE NOW</a>
+                                        <span class="slash-divider"></span>
+                                      <?php }?>
+                                        <a href="/productdetails/{{$order->inmr_hash}}" class="button medium blue w-100-100">BUY AGAIN</a>
+                                        <span class="slash-divider"></span>
+                                    </div>
+                                  </div>
+                                  <?php }?>
+                                  </div>
                             </div><br>
                             
                             <!-- DIVIDER -->
@@ -424,7 +422,7 @@
                           <div class="panel-body">
                               <div class="row" >
                                   <div class="col-md-6">
-                                    <label class="label label-primary" style="color:white; font-size:15px">Order Number {{ $order_no->order_no }}</label><br>
+                                    <label class="label label-primary" style="color:white; ">Order Number {{ $order_no->order_no }}</label><br>
                                   </div>
                                   <div class="col-md-6">
                                     <b style="color:rgb(72, 99, 160); float: right;"> {{ $order_no->order_name }}</b><br>
@@ -593,6 +591,7 @@
                                 <h5 class="modal-title" style="text-align: center; color: rgb(72, 99, 160); font-weight: bold;" id="ModalCancelLabel">CANCEL ORDER</h5>
                               </div>
                               <div class="modal-body">
+                                <form method="get" action="/updatecancel/{{ $order_no->sohr_hash }}" class="form">
                                 <div class="row">
                                   <div class="col-md-12" style="text-align: center; color:black">
                                     <Strong>ARE YOU SURE YOU WANT TO CANCEL YOUR ORDER?</Strong>
@@ -610,14 +609,30 @@
                                   <div class="col-md-10">
                                     <b style="color: rgb(72, 99, 160)">{{ $order->product_name }}</b>
                                   </div>
+                                  <input type="hidden" value="{{$order->soln_hash}}">
                                 </div>
                                 <?php } ?>
                                 <?php endforeach; ?>
+                                <center><Strong style="text-align: center; color:black">SELECT CANCELLATION REASON</Strong></center>
+
+                                <div class="mb-20">
+                                 
+                                  <select class="form-control region" name="reason" id="reason" data-msg-required="PLEASE SELECT REASON" required>
+                                    {{-- <option selected disabled="disabled" selected="selected" value="0" class="default">SELECT REASON</option> --}}
+                                    <?php foreach ($data['reason'] as $reasons): ?>
+                                    <option value="{{$reasons->urfc_hash}}">{{$reasons->reason_name}}</option>
+                                    <?php endforeach; ?> 
+                                  </select>
+                               
+                                </div>
+                              
                               </div>
                               <div class="modal-footer">
-                                <a href="/updatecancel/{{ $order_no->sohr_hash }}" type="button" class="btn btn-primary">Cancel Order</a>
+                                <button type="submit" class="btn btn-primary">Cancel Order</button>
+                                {{-- <a href="/updatecancel/{{ $order_no->sohr_hash }}" type="button" class="btn btn-primary">Cancel Order</a> --}}
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                               </div>
+                            </form>
                             </div>
                           </div>
                         </div>
@@ -642,10 +657,7 @@
 
 @section('embeddedjs')
 <script type="text/javascript">
-$(function() {
-setTimeout(function() { $("#hideDiv").fadeOut(1000); }, 2000)
 
-})
 
 </script>
 @endsection

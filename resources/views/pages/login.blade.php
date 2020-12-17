@@ -194,7 +194,7 @@ function myFunction() {
         });
 
         return stat;
-    };
+  };
 
 
   $('#btnlogin').click(function(){

@@ -8,6 +8,7 @@ use App\Models\OrderHeader;
 use App\Models\OrderDetail;
 use App\Models\Product;
 use Mpdf\Mpdf;
+use Carbon\Carbon;
 use Session;
 use DB;
 
@@ -127,6 +128,8 @@ class ProfileController extends Controller
             ->orderBy('sohr.sohr_hash', 'desc')
             ->get(); 
 
+            $data['reason'] =  DB::table('urfc')->get();
+
 
         return view('pages.profile')->with('data', $data);
     }else{
@@ -170,19 +173,103 @@ class ProfileController extends Controller
             
             $order = OrderHeader::findOrFail($id);
             $order->status_user = '5';
+            $order->is_comp = '1';
             $order->save();
+            return redirect('/profile');
+    } 
+
+    public function updatecancel(Request $request,$id)
+    {       
+                    $order = OrderHeader::findOrFail($id);
+                    $order->order_stat = '9';
+                    $order->status_user = '6';
+                    $order->is_cancel = '1';
+                    $order->user_reason_decline = $request['reason'];
+                    $order->user_decline_datetime = Carbon::now();
+                    $order->save();
+
+                        $myorder = OrderDetail::select('inmr_hash', 'qty')
+                        ->where('soln.sohr_hash', $id)
+                        ->get(); 
+                    
+                        foreach ($myorder as $order)
+                        {
+                            DB::table('inmr')->where('inmr_hash', $order->inmr_hash)->increment('available_qty',$order->qty);
+                        }
             return redirect('/profile');
     } 
     
-    public function updatecancel($id)
-    {       
+    // public function updatecancel(Request $request,$id)
+    // {       
+
+    //     if(Session::has('user_hash')){
+    //         $user_hash = session('user_hash');
+    //         $title = 'Profile';
+    //         $data['profile'] =  User::where('is_deleted', 0)->findOrFail($user_hash);
+
+    //             $supplier = OrderHeader::leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
+    //             ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'sohr.sumr_hash')
+    //             ->leftJoin('oust', 'oust.oust_hash', '=', 'sohr.status_user')
+    //             ->where('sohr.user_hash', $user_hash)
+    //             ->groupBy('sohr.order_no')
+    //             ->orderBy('sohr.sohr_hash', 'desc')
+    //             ->get(); 
+
+    
+    //             // for ($i=0; $i < count($supplier); $i++) { 
+    //                 $order = OrderHeader::findOrFail($id);
+    //                 $order->order_stat = '9';
+    //                 $order->status_user = '6';
+    //                 $order->is_cancel = '1';
+    //                 $order->user_reason_decline = $request['reason'];
+    //                 $order->user_decline_datetime = Carbon::now();
+    //                 $order->save();
+
+    //                     $myorder = OrderDetail::select('inmr_hash', 'qty')
+    //                     ->where('soln.sohr_hash', $id)
+    //                     ->orderBy('sohr.sohr_hash', 'desc')
+    //                     ->get(); 
+                    
+    //                     foreach ($myorder as $order)
+    //                     {
+                            
+    //                     }
+    
+    //                 // for ($a=0; $a < count($myorder); $a++) { 
+    //                 //     if($supplier[$i]->sumr_hash == $myorder[$a]->sumr_hash){
+    
+    //                         $orderdetail = OrderDetail::findOrFail($myorder[$a]->soln_hash);
+    //                         $orderdetail->sohr_hash = $id;
+    //                         $orderdetail->inmr_hash = $myorder[$a]->inmr_hash;
+    //                         $orderdetail->qty = $myorder[$a]->qty;
+    //                         // $orderdetail->save();
+    
+    //                         DB::table('inmr')->where('inmr_hash', $myorder[$a]->inmr_hash)->increment('available_qty',$orderdetail->qty);
+               
+    //             //         }   
+    
+    //             //     }
+    //             // } 
+    //         return redirect('/profile');
+    //     }else{
+    //         return view('pages.login');
+    //     }
             
-            $order = OrderHeader::findOrFail($id);
-            $order->status_user = '6';
-            $order->is_cancel = '1';
-            $order->save();
-            return redirect('/profile');
-    } 
+    //         // $order = OrderHeader::findOrFail($id);
+    //         // $order->order_stat = '9';
+    //         // $order->status_user = '6';
+    //         // $order->is_cancel = '1';
+    //         // $order->user_reason_decline = $request['reason'];
+    //         // $order->user_decline_datetime = Carbon::now();
+    //         // $order->save();
+
+    //         // $orderdetail = OrderDetail::findOrFail($order);
+    //         // $orderdetail->qty = $qty;
+    //         // $orderdetail->save();
+
+    //         // DB::table('inmr')->where('inmr_hash', $orderdetail->inmr_hash)->decrement('available_qty',$orderdetail->qty);
+    //         // return redirect('/profile');
+    // } 
     
     public function review(Request $request, $id)
     {       

@@ -43,6 +43,7 @@ class CartController extends Controller
 
             $data['supplier'] =  CartDetail::leftJoin('sumr', 'sumr.sumr_hash', '=', 'srln.sumr_hash')
             ->leftJoin('srhr', 'srhr.srhr_hash', '=', 'srln.srhr_hash')
+            ->leftJoin('inmr', 'inmr.inmr_hash', '=', 'srln.inmr_hash')
             ->where('srln.srhr_hash', $srhr_hash)
             ->where('srln.status', 0)
             ->where('srln.is_deleted', 0)
@@ -128,7 +129,7 @@ class CartController extends Controller
     // ->where('brgy.city_hash', $city_hash )
     // ->get();
     $ursf = DB::table('ursf')
-            ->select('shipping_fee')
+            ->select('shipping_fee', 'sumr_hash')
             ->where('city_hash', $city_hash)
             ->get();
 
@@ -165,7 +166,7 @@ class CartController extends Controller
 
         if($validator->fails()){
             $response['stat']='error';
-            $response['msg']='<b>Low Available stock.</b>';
+            $response['msg']='<b>Sorry, Low Available stock you can olny checkout '.$qty.' pieces</b>';
             echo json_encode($response);
         } else {
             $addcart = new CartDetail();
@@ -203,12 +204,13 @@ class CartController extends Controller
                     $addcart = new Comment();
                     $addcart->user_hash = $user_hash;
                     $addcart->inmr_hash = $request['inmr_hash'];
+                    $addcart->sumr_hash = $request['sumr_hash'];
                     $addcart->comment = $request->input('comment');
                     $addcart->created_datetime = Carbon::now();
                     $addcart->save();
 
                     $response['stat']='success';
-                    $response['msg']='<b>Your message has been sent to us.</b>';
+                    $response['msg']='<b>Your comment has been posted.</b>';
                     echo json_encode($response);
                 }        
             }
@@ -222,7 +224,7 @@ class CartController extends Controller
             $data['oder'] =  User::where('is_deleted', 0)->findOrFail($srhr_hash);
             
             $ursf = DB::table('ursf')
-            ->select('shipping_fee')
+            ->select('shipping_fee', 'sumr_hash')
             ->where('city_hash', $request->input('city'))
             // ->where('sumr_sumr', $request->input('city'))
             ->get();
@@ -290,6 +292,7 @@ class CartController extends Controller
                         $order_subtotal += $unit_total;
                         $total_qty += $mycart[$a]->qty;
 
+                        $city_sumr_hash= $ursf[0]->sumr_hash;
                         $shipping_city= $ursf[0]->shipping_fee;
                         $dimension = $mycart[$a]->dimension;
                         $weight = $mycart[$a]->weight;
@@ -352,6 +355,7 @@ class CartController extends Controller
                 $order->total_qty = $total_qty;
                 $order->order_subtotal = $order_subtotal;
                 $order->shipping_fee = $shipping;
+                $order->city_sumr_hash = $city_sumr_hash;
                 $order->disc_amt = 0;
                 $order->order_total = $order_total;
                 $order->save();
@@ -407,7 +411,7 @@ class CartController extends Controller
             ->where('soln.inmr_hash',$id)
             // ->where('soln.inmr_hash',$id)
             // ->orderBy('soln.sohr_hash', 'desc')
-            ->get(); 
+            ->paginate(5);
         
         return view('pages.productdetails')->with('data', $data);
     }
@@ -463,12 +467,32 @@ class CartController extends Controller
     public function updateqty(Request $request)
     {       
 
+            $products = Product::where('inmr_hash', $request['inmr_hash'])->firstOrFail();
+            $qty = $products->available_qty;
             $id = $request->srln_hash;
             
             $updatecart = CartDetail::findOrFail($id);
+            $validator = Validator::make($request->all(),
+            [
+                'qty' => 'required|numeric|min:1|max:'.$qty
+            ]
+        );
+        //  )->validate();
+
+         if($validator->fails()){
+            $response['stat']='error';
+            $response['msg']='<b style="color:red">Sorry, Low stock available you can olny checkout '.$qty.' pieces</b>';
+            $response['qty']=$qty;
+        } else {
             $updatecart->qty = $request->qty;
             $updatecart->save();
 
+            $response['stat']='success';
+            $response['msg']='<b>Ready to Checkout</b>';
+        }   
+
+        echo json_encode($response);
+            
     }   
 
     public function delete($id)

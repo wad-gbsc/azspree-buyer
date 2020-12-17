@@ -6,19 +6,6 @@
 @section('content')
 <div id="wrap" class="boxed ">
     <div class="grey-bg">
-        <!-- Grey BG  -->
-        <!-- PAGE TITLE -->
-        {{-- <div class="page-title-cont page-title-small grey-light-bg">
-            <div class="relative container align-left">
-                <div class="row">
-                    <div class="col-md-8">
-                        <h1 class="page-title">{{ $data['products']->product_name }}</h1>
-                    </div>
-                    <div class="col-md-4">
-                    </div>
-                </div>
-            </div>
-        </div> --}}
 
         <!-- CONTENT -->
         <div class="page-section p-140-cont">
@@ -33,17 +20,18 @@
                                 <img src="/images/products/{{$data['products']->image_path}}"
                                     alt="img"></a>
                         </div>
+
                         {{-- <div class="sale-label-cont">
                             <span class="sale-label label-danger bg-red">SALE</span>
                         </div> --}}
 
                         <div class="row">
                             <div class="popup-gallery">
-                                {{-- yung 1 yun yung sumr_hash = seller and yung 2 naman inmr_hash = product id --}}
                                 @foreach(File::glob(public_path('images/products/'.$data['products']->sumr_hash).'/'.$data['products']->inmr_hash.'/*') as $path)
                                 <div class="col-xs-4 post-prev-img">
                                     <a href="{{ str_replace(public_path(''), '', $path) }}">
-                                        <img src="{{ str_replace(public_path(''), '', $path ) }}" alt="img"></a>
+                                        <img src="{{ str_replace(public_path(''), '', $path ) }}" alt="img">
+                                    </a>
                                 </div>
                                 @endforeach
                             </div>
@@ -54,8 +42,6 @@
                     <!-- CONTENT -->
                     <div class="col-md-7 col-sm-12 col-md-offset-1 mb-50">
                         <form id="add-form" autocomplete="off">
-
-                           
                             
                             <h3><label class="mt-0 mb-30">{{ $data['products']->product_name }}</label></h3>
                             <input type="hidden" name="inmr_hash" id="inmr_hash" value="{{ $data['products']->inmr_hash }}" />
@@ -78,15 +64,42 @@
                                         class="display-none-767">Sold</span>
                                         <span class="slash-divider">/</span> 
                                     </label>
+                                    <?php 
+                                    if ($data['products']->total_ratings > 0 && $data['products']->number_ratings > 0) {
+                                        $total_ratings = $data['products']->total_ratings; 
+                                        $number_ratings = $data['products']->number_ratings; 
+
+                                        $total_star = $total_ratings / $number_ratings; 
+                                    ?>
                                     <label style="color:rgb(72, 99, 160); font-size: 18px">
-                                         {{-- 4.8&nbsp; --}}
+                                        {{ number_format($total_star, 1) }}
                                         <span >
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
+                                            <?php
+                                                for( $x = 0; $x < 5; $x++ )
+                                                {
+                                                    if( floor($total_star)-$x >= 1 )
+                                                    { echo '<i class="fa fa-star"></i>'; }
+                                                    elseif( $total_star-$x > 0 )
+                                                    { echo '<i class="fa fa-star-half-o"></i>'; }
+                                                    else
+                                                    { echo '<i class="fa fa-star-o"></i>'; }
+                                                }
+                                            ?>
+                                          </span>
+                                    </label>
+                                    <?php }else{ ?>
+                                    <label style="color:rgb(72, 99, 160); font-size: 18px">
+                                        0
+                                        <span>
                                             <i class="fa fa-star-o"></i>
-                                          </span></label>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                        </span>
+                                    </label>
+                                    <?php }?>
+                                        
                                     <label style="color:rgb(72, 99, 160); font-size: 18px" ><span class="slash-divider">/</span>{{$data['products']->number_ratings}} <span
                                             class="display-none-767">Reviews</span>
                                     </label>
@@ -125,7 +138,7 @@
 
                             <hr class="mt-0 mb-30">
 
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col-sm-6 mb-30">
                                         <select class="select-md input-border w-100" name="variant_1" data-msg-required="Please enter Size" required>
                                             <option>Select size</option>
@@ -145,7 +158,7 @@
                                             <option>White</option>
                                         </select>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <hr class="mt-0 mb-30">
 
@@ -176,6 +189,7 @@
                             
                                         <div class="col-xs-4 col-sm-2 col-md-2 ">
                                              <input type="number" pattern=" 0+\.[0-9]*[1-9][0-9]*$" 
+                                             style="<?php if ($data['products']->available_qty == '0'){ ?> cursor: no-drop; <?php } ?>"
                                              <?php if ($data['products']->available_qty == '0'){ ?> disabled <?php   } ?>
                                              onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-msg-required="Please enter Quantity"
                                              min="1" max="100" class="input-border" name="qty" id="qty" value="1" required>
@@ -185,7 +199,7 @@
                                                 <div class="shop-add-btn-cont">
                                                     <button type="button" id="btnadd" data-user-id="<?php echo session('user_hash'); ?>" 
                                                         <?php if ($data['products']->available_qty == '0'){ ?> disabled <?php   } ?> 
-                                                        class="btn btn-lg btn-primary" style="width: 100%;">
+                                                        class="btn btn-lg btn-primary">
                                                         <span class=""></span> <label class="btnadd_label">ADD TO CART</label>
                                                     </button>
                                                 </div>
@@ -212,94 +226,100 @@
             <div class="panel-body">
                 <div class="row" >&nbsp;
                 <h5 class="widget-title label label-primary" style="color: white">Product Reviews</h5>&nbsp;<br><br>
-            <table class="table">
-                <?php 
-                if(count($data['order']) > 0){
-                  foreach ($data['order'] as $review): 
-                 ?>
-            <tbody>
-                <tr >
-                    <td colspan="5">  
-                      <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="row" >
-                                <div class="col-md-6">
-                                  <b>{{$review->fullname}}</b><br>
-                                  <span>Product: </span><span>{{$review->product_name}}</span>
+                    <table class="table">
+                        <?php 
+                        if(count($data['order']) > 0){
+                        foreach ($data['order'] as $review): 
+                        ?>
+                        <tbody>
+                            <tr >
+                                <td colspan="5">  
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="row" >
+                                            <div class="col-md-6">
+                                            <b>{{$review->fullname}}</b><br>
+                                            <span>Product: </span><span>{{$review->product_name}}</span>
+                                            </div>
+                                            <div class="col-md-6">
+                                            <span style="color:rgb(72, 99, 160); float: right; font-size:20px">
+                                                <?php 
+                                                if ($review->rating == '1') {
+                                                ?>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <?php }?>
+                                                <?php 
+                                                if ($review->rating == '2') {
+                                                ?>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <?php }?>
+                                                <?php 
+                                                if ( $review->rating == '3') {
+                                                ?>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <?php }?>
+                                                <?php 
+                                                if ($review->rating == '4') {
+                                                ?>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <?php }?>
+                                                <?php 
+                                                if ($review->rating == '5') {
+                                                ?>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <?php }?>
+                                                
+                                            </span><br>
+                                            </div>
+                                        </div>
+                                        <br><hr class="mt-0 mb-10">
+                                        <div class="row">
+                                        <div class="col-md-12" style="color:black;">
+                                            {{$review->remarks}}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                  <span style="color:rgb(72, 99, 160); float: right; font-size:20px">
-                                    <?php 
-                                    if ($review->rating == '1') {
-                                    ?>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <?php }?>
-                                    <?php 
-                                    if ($review->rating == '2') {
-                                    ?>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <?php }?>
-                                    <?php 
-                                    if ( $review->rating == '3') {
-                                    ?>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <?php }?>
-                                    <?php 
-                                    if ($review->rating == '4') {
-                                    ?>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <?php }?>
-                                    <?php 
-                                    if ($review->rating == '5') {
-                                    ?>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <?php }?>
-                                    
-                                  </span><br>
-                                </div>
-                            </div>
-                            <br><hr class="mt-0 mb-10">
-                            <div class="row">
-                              <div class="col-md-12" style="color:black;">
-                                  {{$review->remarks}}
-                              </div>
-                          </div>
-                      </div>
-                    </div>    
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-                <?php }else{ ?>
-                  <tr>
-                    <td colspan="5">
-                      <center>No Reviews Yet</center>
-                      <br>
-                    </td>
-                  </tr>
-              </tbody>
-              <?php }?>
-            </table>
+                                </div>    
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                            <?php }else{ ?>
+                            <tr>
+                                <td colspan="5">
+                                <center>No Reviews Yet</center>
+                                <br>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <?php }?>
+                    </table>
+                </div>
             </div>
+            <!-- PAGINATION -->
+            <div class="mt-0" style="padding-left: 10px;">
+                <nav>
+                {{ $data['order']->links() }}
+                </nav> 
             </div>
         </div>
     </div>
@@ -327,88 +347,95 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="row" >
-                        <div class="mb-30">&nbsp;
-                            <h5 class="widget-title label label-primary" style="color: white">question(s)</h5>	
-                          <ul class="media-list text comment-list">
-                            <li>
-                                <div class="contact-form-container">
-
-                                    {{-- <form id="contact-form" action="#" method="POST"> --}}
-                                    <form id="msg-form" autocomplete="off">
-                                      <div class="row">
-                                        <input type="hidden" name="inmr_hash" id="inmr_hash" value="{{ $data['products']->inmr_hash }}" />
-                                      </div>
-                                      
-                                      <div class="row">
-                                        <div>
-                                          <div class="col-md-12 mb-40">
-                                            <!-- <label>Message *</label> -->
-                                            <br>
-                                            <textarea style="resize: vertical;" maxlength="5000" data-msg-required="Please enter your message" rows="3" class="form-control" name="comment" id="comment" placeholder="ENTER YOUR QUESTION(S) HERE" required=""></textarea>
-                                          </div>
+                                <div class="mb-30">&nbsp;
+                                    <h5 class="widget-title label label-primary" style="color: white">question(s)</h5>	
+                                    <br>
+                                <ul class="media-list text comment-list">
+                                    <li>
+                                        <div class="contact-form-container">
+                                            <form id="msg-form" autocomplete="off">
+                                                <?php if(Session::has('user_hash')){ ?>
+                                                <div class="row">
+                                                    <input type="hidden" name="inmr_hash" id="inmr_hash" value="{{ $data['products']->inmr_hash }}" />
+                                                    <input type="hidden" name="sumr_hash" id="sumr_hash" value="{{ $data['products']->sumr_hash }}" />
+                                                </div>
+                                                
+                                                <div class="row">
+                                                    <div>
+                                                    <div class="col-md-12 mb-40" >
+                                                        <div class="col-md-12" >
+                                                        <br>
+                                                            <textarea style="resize: none; width: 100%; float: center;" maxlength="5000" data-msg-required="Please enter your message" rows="10" class="form-control" name="comment" id="comment" placeholder="ENTER YOUR QUESTION(S) HERE" required=""></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row-md-12">
+                                                    <div class="col-md-12">
+                                                    &nbsp;&nbsp;<input type="button" id="btnmsg" value="SEND QUESTION"  class="button medium blue" >
+                                                    </div>
+                                                </div>
+                                                <?php }else{?>
+                                                    <div class="row-md-12">
+                                                        <div class="col-md-12">
+                                                            &nbsp;<a style="color:rgb(57, 57, 199)" href="/login">Login</a> or <a style="color:rgb(57, 57, 199)" href="/signup">Register</a> to ask questions
+                                                        </div>
+                                                    </div>
+                                                <?php }?>
+                                            </form>	
                                         </div>
-                                      </div>
-                                      <div class="row">
+                                    </li>
+
+                                    <?php 
+                                    if(count($data['comment']) > 0){
+                                    foreach ($data['comment'] as $com): 
+                                    ?>
+                                    <!-- Comment Item -->
+                                    <div class="row-md-12">
                                         <div class="col-md-12">
-                                          &nbsp;<input type="button" id="btnmsg" value="SEND MESSAGE" data-user="<?php echo session('user_hash'); ?>"  class="button medium blue" >
+                                            <li class="media comment-item">
+                                                <span style="text-align: center" class="label label-primary pull-left"><i class="icon_question_alt2"></i> QUESTION</span>&nbsp;
+                                                    <div class="media-body">
+                                                        <div class="comment-item-title">
+                                                            <div class="comment-author">
+                                                                {{$com->fullname}}
+                                                                <span class="slash-divider">-</span><span class="comment-date" >{{$com->created_datetime}}</span>
+                                                            </div>
+                                                        <p class="pb-30">{{$com->comment}}</p>
+                                                        </div>
+                                                    </div>
+                                                <?php if($com->answer_status == '1'){ ?> 
+                                                <span style="text-align: center" class="label label-success pull-left"><i class="icon_check_alt2"></i>ANSWER</span>&nbsp;
+                                                    <div class="media-body">
+                                                        <div class="comment-item-title">
+                                                            <div class="comment-author">
+                                                                {{$com->seller_name}}
+                                                                <span class="slash-divider">-</span><span class="comment-date" >{{$com->updated_datetime}}</span>
+                                                            </div>
+                                                        <p class="pb-30">{{$com->answer}}</p>
+                                                        </div>
+                                                    </div>
+                                                <?php }?> 
+                                            </li>
                                         </div>
-                                      </div>
-                                    </form>	
-                                   
-                                  </div>
-                            </li>
-
-                            <?php 
-                            if(count($data['comment']) > 0){
-                            foreach ($data['comment'] as $com): 
-                            ?>
-                            <!-- Comment Item -->
-                            <li class="media comment-item">
-                                <span style="text-align: center" class="label label-primary pull-left"><i class="icon_question_alt2"></i> QUESTION</span>&nbsp;
-                                <div class="media-body">
-                                                    
-                                <div class="comment-item-title">
-                                  <div class="comment-author">
-                                   {{$com->fullname}}
-                                    <span class="slash-divider">-</span><span class="comment-date" >{{$com->created_datetime}}</span>
-                                  </div>
-                                  <p class="pb-30">{{$com->comment}}</p>
+                                    </div>
+                                    <!-- End Comment Item -->
+                                    <?php endforeach; ?>
+                                    <?php }else{ ?>
+                                    <li><center>No Comment Yet</center></li>
+                                    <?php }?>
+                                </ul>
                                 </div>
-                              </div>
-                              <?php if($com->answer_status == '1'){ ?> 
-                              <span style="text-align: center" class="label label-success pull-left"><i class="icon_check_alt2"></i>ANSWER</span>&nbsp;
-                                <div class="media-body">
-                                                    
-                                <div class="comment-item-title">
-                                  <div class="comment-author">
-                                    {{$com->seller_name}}
-                                    <span class="slash-divider">-</span><span class="comment-date" >{{$com->updated_datetime}}</span>
-                                  </div>
-                                  <p class="pb-30">{{$com->answer}}</p>
-                                </div>
-                              </div>
-                              <?php }?> 
-                            </li>
-                            <!-- End Comment Item -->
-                            <?php endforeach; ?>
-                            <?php }else{ ?>
-                            <li><center>No Comment Yet</center></li>
-                            <?php }?>
-                          </ul>
-                        </div>
                             </div>
+                        </div>
+                        <!-- PAGINATION -->
+                        <div class="mt-0" style="padding-left: 10px;">
+                            <nav>
+                            {{ $data['comment']->links() }}
+                            </nav> 
                         </div>
                     </div>
                         <!-- End Add Review -->
-                              
                       </div>
-
-                    <!-- PAGINATION -->
-                    <div class="mt-0">
-                        <nav>
-                        {{ $data['comment']->links() }}
-                        </nav> 
-                    </div>
                 </div>
                 <!-- END tabs  -->
   
@@ -575,7 +602,7 @@
                     $('.success_msg').html(response.msg);
                     $('.row-success2').fadeIn(400);
                     setTimeout(function() {
-                        window.location.href = "/";
+                        window.location.href ='/productdetails/{{$data['products']->inmr_hash}}';
                     },1000);
                 } else {
                     $('.row-error2').show();

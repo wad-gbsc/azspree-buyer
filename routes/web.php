@@ -25,9 +25,7 @@ Route::get('auth/google', 'LoginController@redirectToGoogle');
 Route::get('auth/google/callback', 'LoginController@handleGoogleCallback');
 Route::get('/', 'PagesController@index');
 Route::get('/search', 'PagesController@search');
-Route::post('/search', 'PagesController@search');
 Route::get('/sortbyprice', 'PagesController@sortbyprice');
-Route::get('/sortbypricebycat', 'PagesController@sortbypricebycat');
 Route::get('/login', 'PagesController@login');
 Route::post('/validatelogin', 'LoginController@login');
 Route::get('/logout', 'LoginController@logout');
@@ -58,6 +56,8 @@ Route::post('/cart/updatestatus', 'CartController@updatecart');
 Route::post('/cart/updateqty', 'CartController@updateqty');
 Route::get('/productdetails/{id}', 'CartController@show');
 Route::get('/categories/{id}', 'PagesController@show');
+Route::get('/search', 'PagesController@searchcat');
+Route::get('/sortbypricebycat', 'PagesController@sortbypricebycat');
 
 Route::get('/profile', 'ProfileController@index');
 Route::get('/verify/{id}', 'UsersController@verify');

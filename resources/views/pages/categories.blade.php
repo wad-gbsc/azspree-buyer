@@ -28,12 +28,16 @@
         <div class="clearfix mb-0">
                <!-- SEARCH -->
         <div class="widget">
-          <form class="form-search widget-search-form" action="/search" method="get">
-            <input type="text" name="product_details" class="input-search-widget" placeholder="Search">
+          <?php foreach ($cathash as $cat_hash): ?>
+          {{-- <form class="form-search widget-search-form" action="/categories/{{$cat_hash->inct_hash}}/search" method="get"> --}}
+            <form class="form-search widget-search-form" action="/search" method="get">
+            <input type="hidden" name="category" value={{$cat_hash->inct_hash}}>
+            <input type="text" name="keyword" class="input-search-widget" placeholder="Search">
             <button class="" type="submit" title="Start Search">
               <span aria-hidden="true" class="icon_search"></span>
             </button>
           </form>
+          <?php endforeach; ?>
           </div>
         </div>
       </div>
@@ -41,8 +45,7 @@
       <form method="get" action="/sortbypricebycat" class="form">
         <div class="col-sm3">
           <div class="right">
-        
-              {{-- {{ csrf_field() }} --}}
+            <input type="hidden" name="category" value={{$cat_hash->inct_hash}}>
                 <select class="select-md form" name="sortbypricebycat" onchange="this.form.submit()">
                     <option selected disabled="disabled" selected="selected">Sort by Price</option>
                     <option value="desc">Price: High to Low</option>
@@ -50,6 +53,7 @@
                 </select>
           </div>
         </div>
+      <form>
 
        
         </div>
@@ -58,12 +62,10 @@
              ?>
         <div>
           <center>
-            <input type="hidden" name="inct_hast" value="{{$cat->inct_hash}}"/>
             <h1 class="widget-title">{{$cat->cat_name}}</h1>	
         </center>
         </div><br><br>
         <?php endforeach; ?> 
-        <form>
         <div class="row">
 
           <!-- SHOP Item -->
@@ -72,12 +74,14 @@
           foreach ($content as $products):
           ?>
          <div class="col-md-2 col-lg-2 pb-80 card" >
-          <div class="post-prev-img">
+          <div class="post-prev-img">  
             <a href="/productdetails/{{$products->inmr_hash}}"><img style="height: 250px; width: auto" src="/images/products/{{$products->image_path}}" alt="img"></a>
           </div>
           
           <div class="post-prev-title mb-5">
-            <h3><a class="font-norm a-inv" href="/productdetails/{{$products->inmr_hash}}">{{$products->product_details}}</a></h3>
+            <h3 style="text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;" ><a class="font-norm a-inv" href="/productdetails/{{$products->inmr_hash}}">{{$products->product_name}}</a></h3>
           </div>
             
           <div class="shop-price-cont" data-price={{ $products->cost_amt }}>

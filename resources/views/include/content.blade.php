@@ -18,12 +18,46 @@
 </div>  
 
 <!-- CONTENT -->
-<div class="page-section p-100-cont" >
+<div class="page-section p-100-cont pb-30 " >
   <div class="container">
     <div class="row">
+
+      <!-- SHOP AD -->
+      <div class="page-section" style="background-image: url('/brands_try/cabalen.jpg'); background-repeat: no-repeat; background-size: 100% 100%;">
+        <div class="container">
+          <div class="row">
+          
+            <div class="col-md-6 col-sm-6 p-40">
+              <div class="equal-height">
+                <div class="text-middle block-center-x-767">
+                  {{-- <h3 class="light-34 m-0">HEY<br><span class="bold">GOOD DAY!</span></h3> --}}
+                  {{-- <h3 class="light-34 m-0">NEW 2018 <br><span class="bold">COLLECTION</span></h3> --}}
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-6 col-sm-6 text-center pt-40 pb-40 equal-height">
+              <div class="equal-height">
+                <div class="text-middle block-center-x-767">
+                  {{-- <h3 class="light-34 m-0"><span class="bold">NOW</span> IN STORE</h3> --}}
+                </div>
+              </div>
+            </div>
+
+            {{-- <div class="col-md-4 col-sm-4 shop-ad-img">
+              <div class="equal-height">
+                <img  src="" sizes="10px" alt="img">
+              </div>
+            </div> --}}
+            
+            
+          </div>            
+        </div>            
+      </div>
+
       
         <!-- CONTENT -->
-        <div class="row">
+        <div class="row mt-50">
           <div class="col-sm-9">
             <div class="widget">
               <form class="form-search widget-search-form" action="/search" method="get">
@@ -36,7 +70,7 @@
           </div>
           
           <div class="col-sm3">
-            <div class="right">
+            <div class=" widget right">
                 <form method="get" action="/sortbyprice" class="form">
                   {{-- {{ csrf_field() }} --}}
                     <select class="select-md form" name="sortbyprice" onchange="this.form.submit()">
@@ -49,12 +83,16 @@
           </div>
         </div>
         
-        <div class="row" >
+        {{-- <div class="row" style="background-color: rgb(217, 255, 255); "> --}}
+          <div class="row" >
           <!-- SHOP Item -->
-          <?php foreach ($content as $products): ?>
-          <div class="col-md-2 col-lg-2 pb-80 card" >
+          <?php 
+            if(count($content) > 0){
+            foreach ($content as $products): ?>
+          <div class="col-md-2 col-lg-2 pb-30 pt-30" >
+            {{-- <div class="post-prev-img" style="border-style: solid; border-width: 5px; border-color: cyan;">   --}}
             <div class="post-prev-img">  
-              <a href="/productdetails/{{$products->inmr_hash}}"><img style="height: 250px; width: auto" src="/images/products/{{$products->image_path}}" alt="img"></a>
+              <a href="/productdetails/{{$products->inmr_hash}}" ><img style="height: 250px; width: auto" src="/images/products/{{$products->image_path}}" alt="img"></a>
             </div>
             
             <div class="post-prev-title mb-5">
@@ -68,7 +106,18 @@
             </div>
           </div>
 
-          <?php endforeach; ?>        
+          <?php endforeach; ?>      
+          <?php }else{ ?>
+            <div class="row">
+              <div class="col-md-12 mb-110">
+                  <h4><strong><center>No Result for this Product</center></strong></h4>
+              </div>
+              <div class="col-md-12 mb-110">
+              </div>
+              <div class="col-md-12 mb-110">
+              </div>
+            </div>
+            <?php }?>    
           
           
         </div>

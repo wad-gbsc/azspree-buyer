@@ -207,14 +207,15 @@
                                     <input type="hidden" value="{{ $order_total }}" name="order_total" > --}}
                                     
                                     <input type="hidden" name="payment_method" data-msg-required="PLEASE CHECK PAYMENT METHOD" required>
-                                    <input type="hidden" value="{{ $shipping_extra }}" id="shipping_extra"/>
-                                    <span class="font-norm1" >EXTRA FEE:</span> <strong>&#8369; {{ number_format($shipping_extra, 2) }} </strong><br>
-                                    <span class="font-norm1" >SHIPPING:</span> <strong>&#8369; <span name="shipping"> 0.00</span> </strong><br>
-                                    <span class="font-norm1">ORDER TOTAL:</span> <strong>&#8369; {{ number_format($order_total, 2) }} </strong>
+                                    <input type="hidden" value="{{ $shipping_extra}}" class="shipping_extra_{{ $sumr->sumr_hash }}"/>
+                                    <input type="hidden" value="{{ $order_subtotal }}" class="order_subtotal_{{ $sumr->sumr_hash }}" >
+                                    {{-- <span class="font-norm1" >EXTRA FEE:</span> <strong>&#8369; {{ number_format($shipping_extra, 2) }} </strong><br> --}}
+                                    <span class="font-norm1" >SHIPPING:</span> <strong>&#8369; <span name="shipping" data-sumr_hash="{{ $sumr->sumr_hash }}" class="shipping_{{ $sumr->sumr_hash }}"> 0.00</span> </strong><br>
+                                    <span class="font-norm1">ORDER TOTAL:</span> <strong>&#8369; <span name="order_total" class="order_total_{{ $sumr->sumr_hash }}"> {{ number_format($order_subtotal,2) }}</span> </strong>
                                   </div>
                                 </div>
                   <?php 
-                
+
                 
                 $cart_subtotal += $order_subtotal; 
                 $total_shipping += $shipping; 
@@ -223,7 +224,7 @@
                 endforeach; ?> {{-- END OF SUPPLIER --}}
 
                   <h5 class="mt-60 mb-10" >
-                    <span class="font-norm1">CART SUBTOTAL:</span> <strong style="font-size:20px" >&#8369; {{ number_format($cart_subtotal, 2) }} </strong>
+                    <span class="font-norm1">CART SUBTOTAL:</span> <strong style="font-size:20px" >&#8369; <span id="total_cart_subtotal">{{ number_format($cart_subtotal, 2) }}</span> </strong>
                   </h5> 
                   
                   <h5 class="mt-10 mb-10">
@@ -235,7 +236,7 @@
                   <hr class="mt-0 mb-10">
 
                   <h3 class="mt-10 mb-30">
-                    <span class="font-norm1">TOTAL PAYMENT:</span> <strong style="font-size:22px">&#8369; {{ number_format($total_payment, 2) }} </strong>
+                    <span class="font-norm1">TOTAL PAYMENT:</span> <strong style="font-size:22px">&#8369; <span name="total_payment"> {{ number_format($cart_subtotal, 2) }} </span> </strong>
                   </h3>
                   <?php }?>
                   <div class="row row-error">
@@ -279,6 +280,7 @@
 @stop
 
 @section('embeddedjs')
+<script src="/formatter/accounting.js"></script>
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -295,25 +297,40 @@ $(document).ready(function() {
         // console.log(data);
           $.each(data, function(key, value) {
           // $('span[name="shipping"]').trigger("change");
-          var shipping_extra = parseFloat($('#shipping_extra').val());
           var shipping_fee = parseFloat(value.shipping_fee);
-          var shipping = shipping_fee+shipping_extra;
-          $('span[name="shipping"]').html(shipping);
 
+          $('span[name="shipping"]').each(function(){
+            sumr_hash = $(this).data('sumr_hash');
+
+            var extra_fee = accounting.unformat($('.shipping_extra_'+sumr_hash).val());
+            var total_shipping_fee = shipping_fee + extra_fee;
+
+            $('.shipping_'+sumr_hash).html(accounting.formatNumber(total_shipping_fee,2));
+
+            var order_subtotal = accounting.unformat($('.order_subtotal_'+sumr_hash).val());
+            var grand_order_subtotal = order_subtotal + total_shipping_fee;
+
+            $('.order_total_'+sumr_hash).html(accounting.formatNumber(grand_order_subtotal,2));
+          });
 
           var total_shipping = 0;
           var total_shipping_extra = 0;
 
             $('span[name="shipping"]').each(function(){
-              total_shipping += parseFloat($(this).html());
+              total_shipping += accounting.unformat($(this).html());
             });
 
-            $('#shipping_extra').each(function(){
+            $('.shipping_extra').each(function(){
               total_shipping_extra += parseFloat($(this).val());
             });
           
           var grand_total_shipping = total_shipping + total_shipping_extra;
-          $('#total_shipping').html(grand_total_shipping);
+          $('#total_shipping').html(accounting.formatNumber(grand_total_shipping,2));
+
+          var total_cart_subtotal = accounting.unformat($('#total_cart_subtotal').html());
+          var grand_total = total_cart_subtotal + grand_total_shipping;
+ 
+          $('span[name="total_payment"]').html(accounting.formatNumber(grand_total,2));
           });
         }
         });

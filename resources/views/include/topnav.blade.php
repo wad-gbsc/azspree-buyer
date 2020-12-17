@@ -1,18 +1,18 @@
-<header id="nav" class="header header-1 no-transparent mobile-no-transparent">
+<header id="nav" class="header header-1 mobile" style="background-color:rgb(63, 224, 208);">
           
-    <div class="header-wrapper">
+    {{-- <div class="header-wrapper"> --}}
+      <div >
       <div class="container-m-30 clearfix">
         <div class="logo-row">
-        
           <!-- LOGO --> 
           <div class="logo-container-2">
-  <div class="logo-2">
-    <a href="/" class="clearfix">
-      <img src="/brands_try/azspreelogo.png" class="logo-img" alt="Azspree">
-      {{-- <label>AZSPREE</label> --}}
-    </a>
-  </div>
-</div>
+            <div class="logo-2">
+              <a href="/" class="clearfix">
+                <img src="/brands_try/azspreelogo.png" class="logo-img" alt="Azspree">
+                {{-- <label>AZSPREE</label> --}}
+              </a>
+            </div>
+          </div>
           <!-- BUTTON --> 
           <div class="menu-btn-respons-container">
               <button type="button" class="navbar-toggle btn-navbar collapsed" data-toggle="collapse" data-target="#main-menu .navbar-collapse">
@@ -39,10 +39,10 @@
         <li ><a href="/"><div class="main-menu-title">HOME</div></a></li>
 
         <!-- MENU ITEM -->
-        {{-- <li>
-          <a href="/welcomeseller"><div class="main-menu-title">SELL ON AZSPREE</div></a>
+        <li>
+          <a href="https://forms.gle/UfJ6y8Hprq6YGv847"><div class="main-menu-title">SELL ON AZSPREE</div></a>
         </li>					
-         --}}
+        
         {{-- <!-- MENU ITEM -->
         <li>
           <a href="#"><div class="main-menu-title">MY CART</div></a>

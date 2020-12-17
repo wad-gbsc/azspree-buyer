@@ -73,7 +73,7 @@
                          ?>
                          <tbody>
                       <tr>
-                          <td colspan="8">&nbsp;<input type="checkbox"  class="selectAll"> {{$sumr->seller_name}}</td>
+                          <td colspan="8">&nbsp;<input type="checkbox" class="selectAll"> {{$sumr->seller_name}}</td>
                       </tr>
                           <?php 
                             foreach ($data['mycart'] as $addcart):
@@ -85,20 +85,34 @@
                             // $order_total = $sub_total +$shipping; 
                           ?>
                           <tr>
-                          <td></td>
-                          <td class="text-center">
-                          <input name="is_selected"  type="checkbox" data-srln-hash="{{ $addcart->srln_hash }}" value={{ $unit_total }} class="items" {{ ($addcart->is_selected == 1 ? ' checked' : '') }}>
-                          </td>
-                          <td><a href="/productdetails/{{$addcart->inmr_hash}}"><img style="height: 60px; width: 45px;" src="/images/products/{{$addcart->image_path}}" alt="img"></a></td>
-                          <td><a href="/productdetails/{{$addcart->inmr_hash}}" >{{ $addcart->product_name }}</a></td>
-                          <td>{{ number_format($addcart->unit_price, 2) }}</td>
-                          <td>
-                          <input type="number" id="line_qty_{{ $addcart->srln_hash }}" data-orig-price="{{ $addcart->unit_price }}" data-srln-hash="{{ $addcart->srln_hash }}"  class="input-border white-bg qty" style="width: 70px; " min="1" max="100" value={{ $addcart->qty }}>
-                          </td>
-                        <td><div class="font-black" id="line_total_price_{{ $addcart->srln_hash }}"> {{ number_format($unit_total, 2) }} </div></td>
-                          <td><a  href="/delete/{{ $addcart->srln_hash }}"><span aria-hidden="true" class="icon_close_alt2"></span></a>  </td>
-                           </tr>
+                            <td>
+                            <strong style="font-size:10px" class="label label-danger hidden sold_out_{{ $addcart->srln_hash }}">SOLD OUT</strong>
+                            </td>
+                            <td class="text-center">
+                              <input name="is_selected"  type="checkbox" data-srln-hash="{{ $addcart->srln_hash }}" value={{ $unit_total }} class="items chckbx_{{ $addcart->srln_hash }}" {{ ($addcart->is_selected == 1 ? ' checked' : '') }}>
+                            </td>
+                            <td>
+                                <a href="/productdetails/{{$addcart->inmr_hash}}">
+                                <img style="height: 60px; width: 45px;" src="/images/products/{{$addcart->image_path}}" alt="img">
+                                </a>
+                            </td>
+                            <td><a href="/productdetails/{{$addcart->inmr_hash}}" >{{ $addcart->product_name }}</a></td>
+                            <td>{{ number_format($addcart->unit_price, 2) }}</td>
+                            <td>
+                              <input type="number" id="line_qty_{{ $addcart->srln_hash }}" data-orig-price="{{ $addcart->unit_price }}" 
+                              data-srln-hash="{{ $addcart->srln_hash }}" data-inmr-hash="{{ $addcart->inmr_hash }}"
+                              class="input-border white-bg qty" style="width: 80px;" min="1" name="qty" value={{ $addcart->qty }}>
+                            </td>
+                            <td><div class="font-black" id="line_total_price_{{ $addcart->srln_hash }}"> {{ number_format($unit_total, 2) }} </div></td>
+                            <td><a  href="/delete/{{ $addcart->srln_hash }}"><span aria-hidden="true" style="color:red" class="icon_close_alt2"></span></a>  </td>
+                            
                         
+                        </tr>
+                        <tr class="err-panel-{{ $addcart->srln_hash }} hidden">
+                          <td colspan="8" class="error-panel-{{ $addcart->srln_hash }} hidden">
+                            <span></span>
+                          </td>
+                        </tr>
                       <?php }?> {{-- END OF SAME SELLER/SUPLIER --}}
                       <?php endforeach; ?> {{-- END OF CART --}}
                       <?php endforeach; ?> {{-- END OF SUPPLIER --}}
@@ -123,9 +137,9 @@
           
           <div class="row">
           
-            <div class="col-sm-6">
+            <div class="col-sm-4">
               <form action="#" class="form">
-                <div class="row">
+                {{-- <div class="row">
                 
                   <div class="col-sm-6 mb-10">
                     <input placeholder="COUPON CODE" class="input-border w-100" type="text" required="">
@@ -135,11 +149,11 @@
                     <button type="submit" class="button medium gray-light w-100-767">APPLY CODE</button>
                   </div>
                   
-                </div>
+                </div> --}}
               </form>
             </div>
             
-            <div class="col-sm-6 text-right text-center-767 mb-30" style="color: black">
+            <div class="col-sm-8 text-right text-center-767 mb-30" style="color: black">
                    <span class="font-norm1" style="font-size:20px">CART SUBTOTAL:</span> <strong style="font-size:22px" >&#8369; <strong id="subtotal" > </strong></strong>&nbsp;
                    <button type="submit"  id="btn_checkout" class="button medium blue w-100-767">PROCEED TO CHECKOUT</button> 
                    {{-- <button type="button" id="btncheck" class="button medium gray w-100-767" >
@@ -160,7 +174,7 @@
 <script src="/formatter/accounting.js"></script>
 <script type="text/javascript">
 $(document).ready(function () {
-  var computeItems;
+  var computeItems; var qty_status = 0;
   
   var initializeControls = function() {
         $('.row-error').hide();
@@ -187,7 +201,7 @@ $(document).ready(function () {
         });
 
        computeItems = function(){
-        $('#subtotal').text("");
+        $('#subtotal').html("");
         var subtotal = 0; 
         var is_selected;
 
@@ -205,29 +219,15 @@ $(document).ready(function () {
             }else{
               is_selected = 0;
             }
-
             UpdateCheck (srln_hash,is_selected);
 
           });
 
-          $('#subtotal').text(accounting.formatNumber(subtotal,2));
+          $('#subtotal').html(accounting.formatNumber(subtotal,2));
+
       };
       computeItems();
     }();
-
-        
-
-
-
-    $('#btn_checkout').click(function() {
-        
-      if (!jQuery('.items').is(":checked")) {
-        alert("You Have Not Selected Any Items For Checkout");
-        return false;
-    }else{
-    window.location.href = "/checkout";
-  }
-    });
 
       $('.selectAll').on('change', function(){
           $(this).parents('tbody').find('.items').prop('checked', this.checked);
@@ -246,13 +246,14 @@ $(document).ready(function () {
         computeItems();
     });
 
-    var UpdateQty = (function(srln_hash,qty){
+    var UpdateQty = (function(srln_hash,qty,inmr_hash){
             var _data=$('#').serializeArray();
 
             _data.push({name : "srln_hash" ,value : srln_hash});
             _data.push({name : "qty" ,value : qty});
+            _data.push({name : "inmr_hash" ,value : inmr_hash});
 
-             $.ajaxSetup({
+            $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
@@ -263,11 +264,23 @@ $(document).ready(function () {
                 "url": "{{ url('/cart/updateqty') }}",
                 "data": _data
             });
+            // $.done(function(response) {
+
+            // if (response.stat == "error") {
+            //     $('.row-error').show();
+            //     $('.error_msg').html(response.msg);
+            //     $('.row-error').fadeIn(400);
+                // setTimeout(function() {
+                //     window.location.href = "/login";
+                // },1000);
+            // } 
+            // });
         });
 
     $('.qty').on('change', function () {
         var srln_hash = $(this).data("srln-hash");
         var orig_price = $(this).data("orig-price");
+        var inmr_hash = $(this).data("inmr-hash");
         var qty = $(this).val();
 
         if (qty >= 1){
@@ -275,16 +288,144 @@ $(document).ready(function () {
 
         }else{
           $(this).val(1);
-          alert("QUANTITY MUST BE EQUAL TO OR GRATER THAN 1");
+          // alert("QUANTITY MUST BE EQUAL TO OR GRATER THAN 1");
           qty = 1;
           total_line_price = parseFloat(1 * orig_price);
         }
 
-        $('#line_total_price_'+srln_hash).html(parseFloat(total_line_price));
-        UpdateQty (srln_hash,qty);
+        $('#line_total_price_'+srln_hash).html(accounting.formatNumber(total_line_price,2));
+
+        $('.err-panel-'+srln_hash ).addClass('hidden');
+        $('.sold_out_'+srln_hash).addClass('hidden');
+
+        UpdateQty(srln_hash,qty,inmr_hash).done(function(response){
+
+          if (response.stat == "error") {
+            
+              $('.err-panel-'+srln_hash).removeClass('hidden');
+              $('.error-panel-'+srln_hash).removeClass('hidden');
+              $('.error-panel-'+srln_hash).find('span').html(response.msg);
+
+              if(response.qty <= 0){
+                $('.chckbx_'+srln_hash).prop('checked',false);
+                $('.chckbx_'+srln_hash).attr('disabled',true);
+                $('#line_qty_'+srln_hash).attr('disabled',true);
+                $('.sold_out_'+srln_hash).removeClass('hidden');
+              }else{
+                $('#line_qty_'+srln_hash).attr('disabled',false);
+                $('.sold_out_'+srln_hash).addClass('hidden');
+              }
+              $('#line_qty_'+srln_hash).val(response.qty);  
+              total_line_price = parseFloat(response.qty * orig_price);
+              $('#line_total_price_'+srln_hash).html(accounting.formatNumber(total_line_price,2));
+              // setTimeout(function() {
+              //     window.location.href = "/login";
+              // },1000);
+          }
+
+
+        });
+
         computeItems();
+        // UpdateQty().done(function(response) {
+        
+      // });
     });
+
+    var finalize_items = function(){
+      
+      $('.qty').each(function(){
+        var srln_hash = $(this).data("srln-hash");
+        var orig_price = $(this).data("orig-price");
+        var inmr_hash = $(this).data("inmr-hash");
+        var qty = $(this).val();
+
+        if (qty >= 1){
+          total_line_price = parseFloat(qty * orig_price);
+
+        }else{
+          $(this).val(1);
+          // alert("QUANTITY MUST BE EQUAL TO OR GRATER THAN 1");
+          qty = 1;
+          total_line_price = parseFloat(1 * orig_price);
+        }
+
+        $('#line_total_price_'+srln_hash).html(accounting.formatNumber(total_line_price,2));
+
+        $('.err-panel-'+srln_hash ).addClass('hidden');
+        $('.sold_out_'+srln_hash).addClass('hidden');
+
+        if($('.chckbx_'+srln_hash).prop("checked") == true){
+
+        UpdateQty(srln_hash,qty,inmr_hash).done(function(response){
+
+          if (response.stat == "error") {
+            
+              $('.err-panel-'+srln_hash).removeClass('hidden');
+              $('.error-panel-'+srln_hash).removeClass('hidden');
+              $('.error-panel-'+srln_hash).find('span').html(response.msg);
+
+              if(response.qty <= 0){
+                $('.chckbx_'+srln_hash).prop('checked',false);
+                $('.chckbx_'+srln_hash).attr('disabled',true);
+                $('#line_qty_'+srln_hash).attr('disabled',true);
+                $('.sold_out_'+srln_hash).removeClass('hidden');
+              }else{
+                $('#line_qty_'+srln_hash).attr('disabled',false);
+                $('.sold_out_'+srln_hash).addClass('hidden');
+              }
+              $('#line_qty_'+srln_hash).val(response.qty);  
+              total_line_price = parseFloat(response.qty * orig_price);
+              $('#line_total_price_'+srln_hash).html(accounting.formatNumber(total_line_price,2));
+              // setTimeout(function() {
+              //     window.location.href = "/login";
+              // },1000);
+            qty_status = 0;
+          }else{
+            qty_status = 1;
+          }
+
+
+        });
+
+        }
+      });
+    };
     
+    $('#btn_checkout').click(function() {
+      if (!jQuery('.items').is(":checked")) {
+        alert("You Have Not Selected Any Items For Checkout");
+        return false;
+      }else{
+
+        finalize_items();
+
+        if(qty_status == 1){
+          window.location.href = "/checkout";
+        }else{
+          setTimeout(function(){
+            computeItems();
+          },1000);
+        }
+
+
+        //   UpdateQty().done(function(response) {
+        //       if (response.stat == "success") {
+        //           $('.div_success').show();
+        //           $('.success_msg').html(response.msg);
+        //           $('.row-success').fadeIn(400);
+        //           setTimeout(function() {
+        //               window.location.href = "/checkout";
+        //           },1000);
+        //       } else {
+        //           $('.row-error').show();
+        //           $('.error_msg').html(response.msg);
+        //           $('.row-error').fadeIn(400);
+        //       }
+        // });
+      
+  }
+    });
   
 
   });
