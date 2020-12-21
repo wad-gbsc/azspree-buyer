@@ -41,6 +41,10 @@ class CartController extends Controller
             ->orderBy('srln.srhr_hash', 'desc')
             ->get();
 
+            $data['comr'] = DB::table('comr')
+            ->select('excess_kg_fee', 'max_kg')
+            ->get();
+
             $data['supplier'] =  CartDetail::leftJoin('sumr', 'sumr.sumr_hash', '=', 'srln.sumr_hash')
             ->leftJoin('srhr', 'srhr.srhr_hash', '=', 'srln.srhr_hash')
             ->leftJoin('inmr', 'inmr.inmr_hash', '=', 'srln.inmr_hash')
@@ -63,6 +67,10 @@ class CartController extends Controller
 
             $srhr_hash = session('user_hash');
             $title = 'checkout';
+
+            $data['comr'] = DB::table('comr')
+            ->select('excess_kg_fee', 'max_kg')
+            ->get();
 
             $data['mycart'] = CartDetail::leftJoin('inmr', 'inmr.inmr_hash', '=', 'srln.inmr_hash')
             ->where('srln.srhr_hash', $srhr_hash)
@@ -228,6 +236,10 @@ class CartController extends Controller
             ->where('city_hash', $request->input('city'))
             // ->where('sumr_sumr', $request->input('city'))
             ->get();
+
+            $comr = DB::table('comr')
+            ->select('excess_kg_fee', 'max_kg')
+            ->get();
         
             $mycart = CartDetail::leftJoin('inmr', 'inmr.inmr_hash', '=', 'srln.inmr_hash')
             ->where('srln.srhr_hash', $srhr_hash)
@@ -254,6 +266,10 @@ class CartController extends Controller
                 $total_qty = 0; 
                 $shipping = 0; 
                 $shipping_extra = 0;
+                $total_excess_fee = 0;
+                $total_excess_kg = 0;
+                $xk = 0;
+                $xkf = 0;
                 $shipping_city = 0; 
                 $order_total = 0; 
                 $cart_subtotal = 0; 
@@ -262,7 +278,8 @@ class CartController extends Controller
                 $dimension = 0;
                 $weight = 0;
                 $total_kg = 0;
-                $max_kg = 5;
+                $max_kg = $comr[0]->max_kg;
+                $excess_kg_fee = $comr[0]->excess_kg_fee;
                 $sub_1 = 0;
                 $sub_2 = 0;
 
@@ -300,7 +317,9 @@ class CartController extends Controller
                         if ($dimension > $weight){
                             if ($dimension > $max_kg){
                                 $sub_1= ($dimension - $max_kg);
-                                $sub_2 = ($sub_1 * $max_kg );
+                                $xkf= (($sub_1 * $mycart[$a]->qty) * $excess_kg_fee);
+                                $xk= ($sub_1 * $mycart[$a]->qty);
+                                $sub_2 = ($sub_1 * $excess_kg_fee );
                                 $total_kg = ($sub_2 * $mycart[$a]->qty );
                             }else{
                                 $total_kg = $dimension;
@@ -309,7 +328,9 @@ class CartController extends Controller
                         }else if($dimension = $weight){
                             if ($weight > $max_kg){
                                 $sub_1= ($weight - $max_kg);
-                                $sub_2 = ($sub_1 * $max_kg );
+                                $xkf= (($sub_1 * $mycart[$a]->qty) * $excess_kg_fee);
+                                $xk= ($sub_1 * $mycart[$a]->qty);
+                                $sub_2 = ($sub_1 * $excess_kg_fee );
                                 $total_kg = ($sub_2 * $mycart[$a]->qty );
                             }else{
                                 $total_kg = $weight;
@@ -318,7 +339,9 @@ class CartController extends Controller
                         }else{
                             if ($weight > $max_kg){
                                 $sub_1= ($weight - $max_kg);
-                                $sub_2 = ($sub_1 * $max_kg);
+                                $xkf= (($sub_1 * $mycart[$a]->qty) * $excess_kg_fee);
+                                $xk= ($sub_1 * $mycart[$a]->qty);
+                                $sub_2 = ($sub_1 * $excess_kg_fee);
                                 $total_kg = ($sub_2 * $mycart[$a ]->qty );
                             }else{
                                 $total_kg = $weight;
@@ -326,6 +349,8 @@ class CartController extends Controller
                             }
                         }
                         $shipping_extra += $total_kg;
+                        $total_excess_kg += $xk;
+                        $total_excess_fee += $xkf;
                         $shipping = $shipping_extra + $shipping_city;
                         $order_total = $order_subtotal+$shipping; 
                         
@@ -356,6 +381,8 @@ class CartController extends Controller
                 $order->order_subtotal = $order_subtotal;
                 $order->shipping_fee = $shipping;
                 $order->city_sumr_hash = $city_sumr_hash;
+                $order->total_excess_fee = $total_excess_fee;
+                $order->total_excess_kg = $total_excess_kg;
                 $order->disc_amt = 0;
                 $order->order_total = $order_total;
                 $order->save();

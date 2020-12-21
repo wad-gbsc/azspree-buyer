@@ -24,20 +24,19 @@
       
       <!-- CONTENT -->
       <div class="row">
+        <?php foreach ($cathash as $cat_hash): ?>
       <div class="col-sm-9">
         <div class="clearfix mb-0">
-               <!-- SEARCH -->
+          <!-- SEARCH -->
         <div class="widget">
-          <?php foreach ($cathash as $cat_hash): ?>
           {{-- <form class="form-search widget-search-form" action="/categories/{{$cat_hash->inct_hash}}/search" method="get"> --}}
-            <form class="form-search widget-search-form" action="/search" method="get">
+            <form class="form-search widget-search-form" action="/searchcat" method="get">
             <input type="hidden" name="category" value={{$cat_hash->inct_hash}}>
             <input type="text" name="keyword" class="input-search-widget" placeholder="Search">
             <button class="" type="submit" title="Start Search">
               <span aria-hidden="true" class="icon_search"></span>
             </button>
           </form>
-          <?php endforeach; ?>
           </div>
         </div>
       </div>
@@ -54,6 +53,7 @@
           </div>
         </div>
       <form>
+      <?php endforeach; ?>
 
        
         </div>

@@ -122,9 +122,13 @@
                         $dimension = 0;
                         $weight = 0;
                         $total_kg = 0;
-                        $max_kg = 5;
-
                       ?>
+                      <?php
+                      foreach ($data['comr'] as $comr): 
+                      $max_kg = $comr->max_kg;
+                      $excess_kg_fee = $comr->excess_kg_fee;
+                      ?>
+                      <?php endforeach; ?> 
                           <?php 
                             foreach ($data['mycart'] as $addcart):
                             if($addcart->sumr_hash == $sumr->sumr_hash)
@@ -140,7 +144,7 @@
                             if ($dimension > $weight){
                                 if ($dimension > $max_kg){
                                     $sub_1= ($dimension - $max_kg);
-                                    $sub_2 = ($sub_1 * $max_kg );
+                                    $sub_2 = ($sub_1 * $excess_kg_fee );
                                     $total_kg = ($sub_2 * $addcart->qty );
                                 }else{
                                     $total_kg = $dimension;
@@ -149,7 +153,7 @@
                             }else if($dimension = $weight){
                                 if ($weight > $max_kg){
                                     $sub_1= ($weight - $max_kg);
-                                    $sub_2 = ($sub_1 * $max_kg );
+                                    $sub_2 = ($sub_1 * $excess_kg_fee );
                                     $total_kg = ($sub_2 * $addcart->qty );
                                 }else{
                                     $total_kg = $weight;
@@ -158,7 +162,7 @@
                             }else{
                                 if ($weight > $max_kg){
                                     $sub_1= ($weight - $max_kg);
-                                    $sub_2 = ($sub_1 * $max_kg);
+                                    $sub_2 = ($sub_1 * $excess_kg_fee);
                                     $total_kg = ($sub_2 * $addcart->qty );
                                 }else{
                                     $total_kg = $weight;
@@ -214,14 +218,14 @@
                                     <span class="font-norm1">ORDER TOTAL:</span> <strong>&#8369; <span name="order_total" class="order_total_{{ $sumr->sumr_hash }}"> {{ number_format($order_subtotal,2) }}</span> </strong>
                                   </div>
                                 </div>
-                  <?php 
+                                
+                  <?php
+                  
+                    $cart_subtotal += $order_subtotal; 
+                    $total_shipping += $shipping; 
+                    $total_payment = $cart_subtotal + $total_shipping;
 
-                
-                $cart_subtotal += $order_subtotal; 
-                $total_shipping += $shipping; 
-                $total_payment = $cart_subtotal + $total_shipping;
-
-                endforeach; ?> {{-- END OF SUPPLIER --}}
+                    endforeach; ?> {{-- END OF SUPPLIER --}}
 
                   <h5 class="mt-60 mb-10" >
                     <span class="font-norm1">CART SUBTOTAL:</span> <strong style="font-size:20px" >&#8369; <span id="total_cart_subtotal">{{ number_format($cart_subtotal, 2) }}</span> </strong>

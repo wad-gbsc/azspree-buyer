@@ -56,7 +56,7 @@ Route::post('/cart/updatestatus', 'CartController@updatecart');
 Route::post('/cart/updateqty', 'CartController@updateqty');
 Route::get('/productdetails/{id}', 'CartController@show');
 Route::get('/categories/{id}', 'PagesController@show');
-Route::get('/search', 'PagesController@searchcat');
+Route::get('/searchcat', 'PagesController@searchcat');
 Route::get('/sortbypricebycat', 'PagesController@sortbypricebycat');
 
 Route::get('/profile', 'ProfileController@index');
@@ -69,6 +69,7 @@ Route::post('/updateverification', 'LoginController@updateverification');
 // Route::get('/mycart', 'ProfileController@cart');
 Route::get('/sort', 'ProfileController@sort');
 Route::get('/waybill', 'ProfileController@waybill');
+Route::get('/logs', 'ProfileController@logs');
 
 Route::get('/welcomeseller', 'PagesController@welcomeseller');
 

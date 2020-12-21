@@ -365,4 +365,15 @@ class ProfileController extends Controller
         // Output a PDF file directly to the browser
         $mpdf->Output();
     }
+
+    public function logs()
+    {
+        $mpdf = new Mpdf();
+       
+        $content = view('pages.logs');
+        // Write some HTML code:
+        $mpdf->WriteHTML($content);
+        // Output a PDF file directly to the browser
+        $mpdf->Output();
+    }
 }

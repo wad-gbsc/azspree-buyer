@@ -28,7 +28,7 @@
             <div class="container-m-30 clearfix">	
             
                   <!-- MAIN MENU -->
-                  <div id="main-menu">
+                  <div id="main-menu" style="background-color:rgb(63, 224, 208);">
                     <div class="navbar navbar-default" role="navigation">
 
                       <!-- MAIN MENU LIST -->
@@ -36,11 +36,11 @@
                         <ul class="nav navbar-nav">
                         
         <!-- MENU ITEM -->
-        <li ><a href="/"><div class="main-menu-title">HOME</div></a></li>
+        <li ><a href="/"><div style="color:black" class="main-menu-title">HOME</div></a></li>
 
         <!-- MENU ITEM -->
         <li>
-          <a href="https://forms.gle/UfJ6y8Hprq6YGv847"><div class="main-menu-title">SELL ON AZSPREE</div></a>
+          <a href="https://forms.gle/UfJ6y8Hprq6YGv847"><div style="color:black" class="main-menu-title">SELL ON AZSPREE</div></a>
         </li>					
         
         {{-- <!-- MENU ITEM -->
@@ -80,23 +80,23 @@
         <?php if(Session::has('user_hash')){ ?>
           <li id="menu-cart">
             {{-- <a href="/mycart"><div class="main-menu-title"><span aria-hidden="true" class="icon_cart"></span>CART ({{ session('total_qty') }})</div></a> --}}
-            <a href="/mycart"><div class="main-menu-title"><span aria-hidden="true" class="icon_cart"></span>CART</div></a>
+            <a href="/mycart"><div style="color:black" class="main-menu-title"><span aria-hidden="true" class="icon_cart"></span>CART</div></a>
           </li>
       <?php }else{?>
-          <li id="menu-cart"><a href="/mycart"><div class="main-menu-title"><span aria-hidden="true" class="icon_cart"></span>CART (0)</div></a></li>
+          <li id="menu-cart"><a href="/mycart"><div style="color:black" class="main-menu-title"><span aria-hidden="true" class="icon_cart"></span>CART (0)</div></a></li>
       <?php }?>
 
         <!-- MENU ITEM -->
         <?php if(Session::has('user_hash')){ ?>
           <li class="parent">
-            <a ><div class="main-menu-title"><span aria-hidden="true"class="fa fa-user"></span> {{ session('fullname') }}</div></a>
-            <ul class="sub">
-              <li><a href="/profile">Profile</a> </li>
-              <li><a href="/logout">Logout</a> </li>
+            <a ><div style="color:black" class="main-menu-title"><span aria-hidden="true"class="fa fa-user"></span> {{ session('fullname') }}</div></a>
+            <ul class="sub" style="background-color:rgb(63, 224, 208);">
+              <li><a style="color:black" href="/profile">Profile</a> </li>
+              <li><a style="color:black" href="/logout">Logout</a> </li>
             </ul>
           </li>
       <?php }else{?>
-          <li ><a href="/login"><div class="main-menu-title">LOGIN</div></a></li>
+          <li ><a href="/login"><div style="color:black" style="color:black" class="main-menu-title">LOGIN</div></a></li>
       <?php }?>
       
         
