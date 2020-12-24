@@ -35,4 +35,10 @@ return [
         'redirect' => 'https://localhost.azspree.com/auth/google/callback',
     ],
 
+    'facebook' => [
+        'client_id' => '217655209954828',
+        'client_secret' => 'a07df56157a5c6f880e3b83709365227',
+        'redirect' => 'https://localhost.azspree.com/auth/facebook/callback',
+    ],
+
 ];

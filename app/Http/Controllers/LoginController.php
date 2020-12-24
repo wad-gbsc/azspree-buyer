@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Session;
 use Hash;
 use DB;
+use Carbon\Carbon;
 use Socialite;
 
 class LoginController extends Controller
@@ -124,44 +125,106 @@ class LoginController extends Controller
 
             $user = Socialite::driver('google')->user();
 
-            $finduser = User::where('email', $user->email)->first();
-            // $result = User::select('*')
-            // ->where('email', $email)
-            // ->where('type', 'US')
-            // ->where('status', 'A')
-            // ->get();
+            $finduser = User::select('*')
+                    ->where('email', $user->email)
+                    ->where('type', 'US')
+                    ->where('status', 'A')
+                    ->get();
 
-            if($finduser){
+            if(count($finduser) > 0){
+                
+                session()->put('user_hash', $finduser[0]->user_hash);
+                session()->put('fullname', $finduser[0]->fullname);
+                session()->save();
+                DB::table('user')->where('user_hash', $finduser[0]->user_hash)->update(['is_verified' => '1']); 
 
-                Auth::login($finduser);
-
-                return redirect('/');
+                return redirect('/profile');
 
             }else{
-                // $newUser = new User();
-                // $newUser->fullname = $user->name;
-                // $newUser->email = $user->email;
-                // $newUser->password = Hash::make($user->password);
-                // $newUser->type = 'US';
-                // $newUser->status = 'A';
-                // $newUser->create_datetime = Carbon::now();
-                // $newUser->save();
-                $newUser = User::create([
-                    'fullname' => $user->name,
-                    'email' => $user->email,
-                    'password' => Hash::make($user->password),
-                    'google_id'=> $user->id
-                ]);
+                $newUser = new User();
+                $newUser->fullname = $user->name;
+                $newUser->email = $user->email;
+                $newUser->type = 'US';
+                $newUser->status = 'A';
+                $newUser->google_id = $user->id;
+                $newUser->create_datetime = Carbon::now();
+                $newUser->save();
 
-                // Auth::login($newUser);
+                DB::table('user')->where('user_hash', $newUser->user_hash)->update(['is_verified' => '1']); 
 
-                // return redirect('/');
-                return redirect()->back();
+                if(count($finduser) > 0){
+
+                    session()->put('user_hash', $finduser[0]->user_hash);
+                    session()->put('fullname', $finduser[0]->fullname);
+                    session()->save();
+    
+                }
+
+                return redirect('/profile');
             }
 
         } catch (Exception $e) {
             // dd($e->getMessage());
             return redirect('auth/google');
+        }
+    }
+
+    public function redirectTofacebook()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+
+    public function handlefacebookCallback()
+    {
+
+        // $user = Socialite::driver('facebook')->user();
+        // dd($user);
+
+        try {
+
+            $user = Socialite::driver('facebook')->user();
+
+            $finduser = User::select('*')
+                    ->where('email', $user->email)
+                    ->where('type', 'US')
+                    ->where('status', 'A')
+                    ->get();
+
+            if(count($finduser) > 0){
+                
+                session()->put('user_hash', $finduser[0]->user_hash);
+                session()->put('fullname', $finduser[0]->fullname);
+                session()->save();
+                DB::table('user')->where('user_hash', $finduser[0]->user_hash)->update(['is_verified' => '1']); 
+
+                return redirect('/profile#');
+
+            }else{
+                $newUser = new User();
+                $newUser->fullname = $user->name;
+                $newUser->email = $user->email;
+                $newUser->type = 'US';
+                $newUser->status = 'A';
+                $newUser->facebook_id = $user->id;
+                $newUser->create_datetime = Carbon::now();
+                $newUser->save();
+
+                DB::table('user')->where('user_hash', $newUser->user_hash)->update(['is_verified' => '1']); 
+
+                if(count($finduser) > 0){
+
+                    session()->put('user_hash', $finduser[0]->user_hash);
+                    session()->put('fullname', $finduser[0]->fullname);
+                    session()->save();
+    
+                }
+
+                return redirect('/profile#');
+            }
+
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            return redirect('auth/facebook');
         }
     }
     

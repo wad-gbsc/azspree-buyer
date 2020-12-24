@@ -238,7 +238,7 @@ class CartController extends Controller
             ->get();
 
             $comr = DB::table('comr')
-            ->select('excess_kg_fee', 'max_kg')
+            ->select('excess_kg_fee', 'max_kg', 'azspree', 'dh')
             ->get();
         
             $mycart = CartDetail::leftJoin('inmr', 'inmr.inmr_hash', '=', 'srln.inmr_hash')
@@ -280,6 +280,10 @@ class CartController extends Controller
                 $total_kg = 0;
                 $max_kg = $comr[0]->max_kg;
                 $excess_kg_fee = $comr[0]->excess_kg_fee;
+                $azspree_percent = $comr[0]->azspree;
+                $dh_percent = $comr[0]->dh;
+                $azspree = 0;
+                $dh = 0;
                 $sub_1 = 0;
                 $sub_2 = 0;
 
@@ -353,7 +357,10 @@ class CartController extends Controller
                         $total_excess_fee += $xkf;
                         $shipping = $shipping_extra + $shipping_city;
                         $order_total = $order_subtotal+$shipping; 
-                        
+                        $azspree = $order_total * $azspree_percent;
+                        $dh = $order_total * $dh_percent;
+
+
                         $orderdetail = new OrderDetail();
                         $orderdetail->sohr_hash = $sohr_hash;
                         $orderdetail->inmr_hash = $mycart[$a]->inmr_hash;
@@ -385,6 +392,8 @@ class CartController extends Controller
                 $order->total_excess_kg = $total_excess_kg;
                 $order->disc_amt = 0;
                 $order->order_total = $order_total;
+                $order->azspree = $azspree;
+                $order->dh = $dh;
                 $order->save();
             }
             DB::table('user')->where('user_hash', $sohr_hash)->update(['regn_hash' => $request->input('barangay'), 'prov_hash' => $request->input('province'), 'city_hash' => $request->input('city'), 'brgy_hash' => $request->input('region'), 'address' => $request->input('address')]);  

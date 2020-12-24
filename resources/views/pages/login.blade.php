@@ -20,7 +20,7 @@
                   <div class="mb-40" style="text-align: center">
                     <img src="/brands_try/azspreelogo.png" class="" alt="Azspree">
                     <br><br><br><br>  
-                    <button class="btn btn-primary" style="width: 80%" ><i class="fa fa-facebook" aria-hidden="true"></i> Login with Facebook</button>
+                    <a href="{{ url('auth/facebook') }}" class="btn btn-primary" style="width: 80%" ><i class="fa fa-facebook" aria-hidden="true"></i> Login with Facebook</a>
                     <br>&nbsp;
                       <!-- DIVIDER -->
                       <hr class="mt-0 mb-10">

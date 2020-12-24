@@ -23,6 +23,8 @@
 // Route::get('/welcome', 'PagesController@index');
 Route::get('auth/google', 'LoginController@redirectToGoogle');
 Route::get('auth/google/callback', 'LoginController@handleGoogleCallback');
+Route::get('auth/facebook', 'LoginController@redirectTofacebook');
+Route::get('auth/facebook/callback', 'LoginController@handlefacebookCallback');
 Route::get('/', 'PagesController@index');
 Route::get('/search', 'PagesController@search');
 Route::get('/sortbyprice', 'PagesController@sortbyprice');

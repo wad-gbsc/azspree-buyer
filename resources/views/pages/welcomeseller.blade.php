@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- PAGE TITLE LARGE IMG -->
-    <div class="page-title-cont page-title-large page-title-img grey-dark-bg pt-250" style="background-image: url(HTML/images/shop-bg.jpg)">
+    <div class="page-title-cont page-title-large page-title-img grey-dark-bg pt-250" style="background-image: url(/brands_try/7.jpg)">
         <div class="relative container align-left">
           <div class="row">
              
@@ -22,6 +22,27 @@
           </div>
         </div>
       </div>			
+      <!-- FLEX SLIDER -->
+    {{-- <div class="indent-header">
+      <div class="slider-1 clearfix">
+       
+        <div class="flex-container">
+          <div class="flexslider loading">
+            <ul class="slides">
+
+              <li style="background: url(/brands_try/7.jpg); background-repeat: no-repeat; background-position:50% 0; background-size: 100% 100%;">
+                <div class="container">
+                  <div class="contain">
+                  </div>
+                </div><!-- End Container -->
+              </li><!-- End item -->
+
+            </ul>
+          </div>
+        </div>
+         
+      </div><!-- End slider -->		
+  </div> --}}
 	
   
   <!-- BLOG 1 -->
