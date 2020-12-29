@@ -108,16 +108,24 @@
         <table class="table1" style="font-size: 14pt; width: 100%; margin-top: 5px;">
             <thead>
                 <tr>
+                    <th colspan="9" class="th1" style="text-align:left;"></th>
+                    <th colspan="5" class="th1" style="text-align:center;">Payout</th>
+                </tr>
+                <tr>
                     <th class="th1" style="text-align:left;">Order No.</th>
                     <th class="th1" style="text-align:left;">Merchant Name</th>
                     <th class="th1" style="text-align:left;">Order Date</th>
                     <th class="th1" style="text-align:left;">Payment Method</th>
-                    <th class="th1" style="text-align:left;">Buyer's ShippingFee</th>
-                    <th class="th1" style="text-align:left;">Merchants's ShippingFee</th>
                     <th class="th1" tyle="text-align:left;">Status</th>
                     <th class="th1" style="text-align:left;">Quantity</th>
                     <th class="th1" style="text-align:left;">Order Cost Total</th>
+                    <th class="th1" style="text-align:left;">Buyer's ShippingFee</th>
+                    <th class="th1" style="text-align:left;">Merchants's ShippingFee</th>
+                    <th class="th1" style="text-align:left;">Merchant</th>
+                    <th class="th1" style="text-align:left;">DH1</th>
+                    <th class="th1" style="text-align:left;">DH2</th>
                     <th class="th1" style="text-align:left;">Azspree</th>
+                    <th class="th1" style="text-align:left;">Total</th>
                 </tr>
             </thead>
                 <tbody>
@@ -126,11 +134,15 @@
                         <td class="td1" style="text-align:left; ">Allyza Olmos</td>
                         <td class="td1" style="text-align:left; width: 45px;">12/25/2020</td>
                         <td class="td1" style="text-align:left; ">COD</td>
-                        <td class="td1" style="text-align:right; ">100</td>
-                        <td class="td1" style="text-align:right; ">100</td>
                         <td class="td1" style="text-align:left; ">COMPLETED</td>
+                        <td class="td1" style="text-align:right; ">100</td>
+                        <td class="td1" style="text-align:right; ">100</td>
                         <td class="td1" style="text-align:right; ">1000</td>
                         <td class="td1" style="text-align:right; ">2000</td>
+                        <td class="td1" style="text-align:right; ">1000</td>
+                        <td class="td1" style="text-align:right; ">1000</td>
+                        <td class="td1" style="text-align:right; ">2000</td>
+                        <td class="td1" style="text-align:right; ">1000</td>
                         <td class="td1" style="text-align:right; ">1000</td>
                     </tr>
                 </tbody>

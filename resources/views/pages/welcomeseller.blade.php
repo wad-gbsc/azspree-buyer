@@ -1,8 +1,36 @@
 @extends('pages.index')
 
 @section('content')
+
+<div class="sm-img-bg pt-180" style="background-image: url(/brands_try/gif.gif); background-repeat: no-repeat; background-position:50% 0; background-size: 100% 100%;">
+  <div class="container sm-content-cont text-center">
+    <div class="sm-cont-middle">
+
+      <!-- OPACITY container -->
+      <div class="opacity-scroll2">
+
+        <!-- LAYER NR. 1 -->
+        <div class="font-white light-72-wide sm-mb-15 sm-mt-20" >
+          WE ARE <span class="bold">HASWELL</span>
+        </div>
+
+        <!-- LAYER NR. 2 -->
+        <div class="font-white norm-16-wide hide-0-736 sm-mb-50">
+          BRANDING<span class="slash-divider-10">/</span>DESIGN<span class="slash-divider-10">/</span>DEVELOPMENT<span class="slash-divider-10">/</span>PHOTO
+        </div>
+
+        <!-- LAYER NR. 3 -->
+        <div class="center-0-478">
+          <a class="button medium thin hover-dark tp-button white" href="http://themeforest.net/user/abcgomel/portfolio?ref=abcgomel">SEE MORE</a><a class="button medium thin hover-dark tp-button white ml-20" href="http://themeforest.net/user/abcgomel/portfolio?ref=abcgomel">PURCHASE</a>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>	
     <!-- PAGE TITLE LARGE IMG -->
-    <div class="page-title-cont page-title-large page-title-img grey-dark-bg pt-250" style="background-image: url(/brands_try/7.jpg)">
+    {{-- <div class="page-title-cont page-title-large page-title-img grey-dark-bg pt-250" style="background-image: url(/brands_try/gif.gif);  background-repeat: no-repeat; background-position:50% 0; background-size: 100% 100%;">
         <div class="relative container align-left">
           <div class="row">
              
@@ -21,7 +49,7 @@
             
           </div>
         </div>
-      </div>			
+      </div>			 --}}
       <!-- FLEX SLIDER -->
     {{-- <div class="indent-header">
       <div class="slider-1 clearfix">
@@ -30,7 +58,7 @@
           <div class="flexslider loading">
             <ul class="slides">
 
-              <li style="background: url(/brands_try/7.jpg); background-repeat: no-repeat; background-position:50% 0; background-size: 100% 100%;">
+              <li style="background: url(/brands_try/gif.gif); background-repeat: no-repeat; background-position:50% 0; background-size: contain;">
                 <div class="container">
                   <div class="contain">
                   </div>
@@ -117,31 +145,9 @@
       </div>
       </div>
       <center><h2>WHY SELL ON AZSPREE</h2></center>
-      <div class="shop-info grey-light-bg pt-110-b-80-cont">
+      <div class="shop-info ">
         <div class="container">
-      <div class="row">
-        
-        <div class="col-md-3 col-md-6 text-center">
-          <span class="icon icon-basic-globe"></span><br>
-            <label class="black-text ">FREE SHIPPING</label>
-            <h5>FREE SHIP-ON ORDER OVER RS.600.</h5>
-        </div>
-        <div class="col-md-3 col-md-6 text-center">
-            <span class="icon icon-basic-clockwise"></span><br>
-            <label class="black-text ">SPECIAL SALE</label>
-            <h5>ALL ITEMS-SALE UP TO 20% OFF.</h5>
-        </div>
-        <div class="col-md-3 col-md-6 text-center">
-            <span class="icon icon-basic-globe"></span><br>
-              <label class="black-text ">FREE SHIPPING</label>
-              <h5>FREE SHIP-ON ORDER OVER RS.600.</h5>
-          </div>
-          <div class="col-md-3 col-md-6 text-center">
-              <span class="icon icon-basic-clockwise"></span><br>
-              <label class="black-text ">SPECIAL SALE</label>
-              <h5>ALL ITEMS-SALE UP TO 20% OFF.</h5>
-          </div>
-      </div>
+        <img src="/brands_try/wcmrchnt.jpg" alt="img">
         </div>
       </div>
       <div class="container">

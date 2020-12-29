@@ -8,7 +8,7 @@
         <div class="row mb-30" >
           <div class="owl-clients-nav owl-carousel owl-arrows-bg" >
             <?php foreach ($categories as $category): ?> 
-            <div class="item m-bot-0 text-center"><a href="/categories/{{$category->inct_hash}}" class="widget-title">{{$category->cat_name}}<br><img src="/images/category/{{$category->img_path}}" alt="img"></a></div>
+            <div class="item m-bot-0 text-center"><a href="/categories/{{$category->inct_hash}}" class="widget-title" style="font-size: 20px;">{{$category->cat_name}}<br><img src="/images/category/{{$category->img_path}}" alt="img"></a></div>
              <?php endforeach; ?>
           </div>
         </div>
@@ -89,10 +89,9 @@
           <?php 
             if(count($content) > 0){
             foreach ($content as $products): ?>
-          <div class="col-md-2 col-lg-2 pb-30 pt-30" >
-            {{-- <div class="post-prev-img" style="border-style: solid; border-width: 5px; border-color: cyan;">   --}}
-            <div class="post-prev-img">  
-              <a href="/productdetails/{{$products->inmr_hash}}" ><img style="height: 250px; width: auto" src="/images/products/{{$products->image_path}}" alt="img"></a>
+          <div class="col-md-2 pb-30 pt-30" >
+            <div>  
+              <a href="/productdetails/{{$products->inmr_hash}}" ><img style="height: 250px;" src="/images/products/{{$products->image_path}}" alt="img"></a>
             </div>
             
             <div class="post-prev-title mb-5">
@@ -109,18 +108,16 @@
           <?php endforeach; ?>      
           <?php }else{ ?>
             <div class="row">
-              <div class="col-md-12 mb-110">
-                  <h4><strong><center>No Result for this Product</center></strong></h4>
-              </div>
-              <div class="col-md-12 mb-110">
-              </div>
-              <div class="col-md-12 mb-110">
-              </div>
+                <div class="col-md-12 mb-110">
+                    <h4><strong><center>No Result for this Product</center></strong></h4>
+                </div>
+                <div class="col-md-12 mb-110">
+                </div>
+                <div class="col-md-12 mb-110">
+                </div>
             </div>
             <?php }?>    
-          
-          
-        </div>
+        
                         
         <!-- PAGINATION -->
         <div class="mt-0" style="float: right;">
